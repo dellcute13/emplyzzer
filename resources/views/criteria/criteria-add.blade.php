@@ -1,0 +1,163 @@
+@extends('layouts.app')
+
+@section('content')
+    <section class="p-8 space-y-8 flex-1">
+        <div>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface">Tambah Kriteria Baru</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant">Konfigurasi parameter untuk perhitungan Simple
+                Additive Weighting (SAW).</p>
+        </div>
+        <button
+            class="flex items-center space-x-2 text-on-primary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm">
+            <span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+            <span>Kembali ke Daftar</span>
+        </button>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+            <div class="lg:col-span-2 space-y-lg">
+                <div class="bg-white rounded-xl card-shadow border border-slate-200 p-lg overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-primary-container"></div>
+                    <form class="space-y-xl">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+                            <div class="space-y-xs">
+                                <label
+                                    class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wide">Kode
+                                    Kriteria</label>
+                                <input
+                                    class="w-full bg-white border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md"
+                                    placeholder="Contoh: C1" type="text" />
+                                <p class="text-[11px] text-on-surface-variant/70 italic">ID unik untuk referensi matriks
+                                    keputusan.</p>
+                            </div>
+                            <div class="space-y-xs">
+                                <label
+                                    class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wide">Nama
+                                    Kriteria</label>
+                                <input
+                                    class="w-full bg-white border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-primary-container focus:border-primary-container transition-all text-body-md font-body-md"
+                                    placeholder="Contoh: Pengalaman Kerja" type="text" />
+                            </div>
+                        </div>
+                        <div class="space-y-md">
+                            <div class="flex justify-between items-end">
+                                <div class="space-y-xs">
+                                    <label
+                                        class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wide">Bobot
+                                        Kepentingan (Weight)</label>
+                                    <p class="text-xs text-on-surface-variant/70">Tentukan persentase pengaruh kriteria ini
+                                        terhadap skor total.</p>
+                                </div>
+                                <div
+                                    class="bg-primary-container text-white px-md py-xs rounded-lg font-headline-md text-headline-md">
+                                    25%
+                                </div>
+                            </div>
+                            <div class="relative h-12 flex items-center">
+                                <input
+                                    class="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-primary-container"
+                                    max="100" min="0" type="range" value="25" />
+                                <div class="absolute -bottom-2 left-0 w-full flex justify-between px-1">
+                                    <span class="text-[10px] font-bold text-slate-400">0%</span>
+                                    <span class="text-[10px] font-bold text-slate-400">50%</span>
+                                    <span class="text-[10px] font-bold text-slate-400">100%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-xs">
+                            <label
+                                class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wide mb-md">Tipe
+                                Kriteria</label>
+                            <div class="grid grid-cols-2 gap-md">
+                                <label
+                                    class="relative flex items-center p-lg border border-outline-variant rounded-xl cursor-pointer hover:bg-slate-50 transition-colors group">
+                                    <input checked="" class="hidden peer" name="type" type="radio" />
+                                    <div
+                                        class="w-5 h-5 border-2 border-outline-variant rounded-full peer-checked:border-secondary peer-checked:bg-secondary mr-md flex items-center justify-center transition-all">
+                                        <div class="w-2 h-2 bg-white rounded-full"></div>
+                                    </div>
+                                    <div>
+                                        <span class="font-headline-md text-headline-md block text-on-surface">Benefit</span>
+                                        <span class="font-body-md text-body-md text-on-surface-variant">Semakin besar nilai
+                                            semakin baik.</span>
+                                    </div>
+                                </label>
+                                <label
+                                    class="relative flex items-center p-lg border border-outline-variant rounded-xl cursor-pointer hover:bg-slate-50 transition-colors group">
+                                    <input class="hidden peer" name="type" type="radio" />
+                                    <div
+                                        class="w-5 h-5 border-2 border-outline-variant rounded-full peer-checked:border-secondary peer-checked:bg-secondary mr-md flex items-center justify-center transition-all">
+                                        <div class="w-2 h-2 bg-white rounded-full"></div>
+                                    </div>
+                                    <div>
+                                        <span class="font-headline-md text-headline-md block text-on-surface">Cost</span>
+                                        <span class="font-body-md text-body-md text-on-surface-variant">Semakin kecil nilai
+                                            semakin baik.</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="pt-lg border-t border-slate-100 flex justify-end space-x-md">
+                            <button
+                                class="px-xl py-md border border-primary-container text-primary-container font-label-sm text-label-sm rounded-lg hover:bg-slate-50 transition-all uppercase tracking-widest font-bold"
+                                type="button">Batal</button>
+                            <button
+                                class="px-xl py-md bg-primary-container text-white font-label-sm text-label-sm rounded-lg hover:opacity-90 transition-all shadow-md uppercase tracking-widest font-bold"
+                                type="submit">Simpan Kriteria</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="space-y-lg">
+                <div class="bg-white rounded-xl card-shadow border border-slate-200 p-lg">
+                    <h3 class="font-headline-md text-headline-md text-on-surface mb-md flex items-center">
+                        <span class="material-symbols-outlined mr-sm text-primary-container"
+                            data-icon="lightbulb">lightbulb</span>
+                        Tips Analisis
+                    </h3>
+                    <ul class="space-y-md">
+                        <li class="flex items-start space-x-md">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-secondary shrink-0"></div>
+                            <p class="font-body-md text-body-md text-on-surface-variant">Pastikan total bobot dari seluruh
+                                kriteria berjumlah 100%.</p>
+                        </li>
+                        <li class="flex items-start space-x-md">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-secondary shrink-0"></div>
+                            <p class="font-body-md text-body-md text-on-surface-variant">Gunakan tipe
+                                <strong>Benefit</strong> untuk kriteria seperti Omzet atau Kualitas.</p>
+                        </li>
+                        <li class="flex items-start space-x-md">
+                            <div class="mt-1 w-2 h-2 rounded-full bg-secondary shrink-0"></div>
+                            <p class="font-body-md text-body-md text-on-surface-variant">Gunakan tipe <strong>Cost</strong>
+                                untuk kriteria seperti Harga atau Risiko.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-primary-container rounded-xl card-shadow p-lg text-white">
+                    <div class="flex items-center justify-between mb-md">
+                        <h3 class="font-label-sm text-label-sm uppercase tracking-widest text-slate-400">Statistik Kriteria
+                        </h3>
+                        <span class="material-symbols-outlined text-slate-400"
+                            data-icon="data_exploration">data_exploration</span>
+                    </div>
+                    <div class="space-y-xl">
+                        <div>
+                            <p class="font-body-md text-body-md text-slate-300">Total Kriteria Terdaftar</p>
+                            <p class="font-display-xl text-display-xl">04</p>
+                        </div>
+                        <div>
+                            <p class="font-body-md text-body-md text-slate-300">Total Bobot Akumulasi</p>
+                            <div class="flex items-center space-x-md mt-xs">
+                                <p class="font-display-xl text-display-xl">75%</p>
+                                <div class="flex-1 bg-slate-700 h-2 rounded-full overflow-hidden">
+                                    <div class="bg-secondary h-full w-[75%]"></div>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-on-primary-container mt-sm">Sisa 25% bobot tersedia untuk
+                                dialokasikan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
