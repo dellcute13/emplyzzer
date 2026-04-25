@@ -1,4 +1,4 @@
-@include('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <section class="p-8 space-y-8 flex-1">

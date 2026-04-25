@@ -24,7 +24,8 @@
     {{-- Material Symbols --}}
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
@@ -164,9 +165,16 @@
             border-right-width: 4px;
         }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
 
-<body class="font-body-md text-on-surface antialiased">
+<body x-data="{ logoutModal: false }" class="font-body-md text-on-surface antialiased">
+
 
     @include('layouts.partials.sidebar')
 
@@ -175,6 +183,7 @@
         @include('layouts.partials.navbar')
         <section class="flex-1 p-8">
             @yield('content')
+            @include('layouts.partials.flash')
         </section>
 
     </main>
@@ -194,6 +203,51 @@
             {{ session('error') }}
         </div>
     @endif
+
+    @if (session('modal_success'))
+        <x-alert type="success" title="Success!" :message="session('modal_success')" button="Go Back to Dashboard" />
+    @endif
+
+    <div x-show="logoutModal" x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+
+        <div x-show="logoutModal" x-transition:enter="transition ease-out duration-400"
+            x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+            class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 text-center">
+
+            <div
+                class="w-16 h-16 mx-auto rounded-full bg-red-100 flex items-center justify-center text-red-500 text-3xl mb-5">
+                <span class="material-symbols-outlined" data-icon="logout">logout</span>
+            </div>
+
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">
+                Logout Account?
+            </h2>
+
+            <p class="text-slate-500 mb-6">
+                Apakah kamu yakin ingin keluar dari sistem?
+            </p>
+
+            <div class="grid grid-cols-2 gap-3">
+
+                <button @click="logoutModal = false" @click.away="logoutModal = false"
+                    class="py-3 rounded-xl border border-slate-200 font-semibold hover:bg-slate-50">
+                    Cancel
+                </button>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold">
+                        Logout
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
 
     @stack('scripts')
 </body>

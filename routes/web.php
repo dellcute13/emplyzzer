@@ -8,6 +8,8 @@ use App\Http\Controllers\EmployeeGradeController;
 use App\Http\Controllers\EmployeeRankController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SawProcessController;
+use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Auth\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(LoginController::class)->group(function () {
 
         // Logout
-        Route::get('/logout', 'logout')->name('logout');
+        Route::post('/logout', 'logout')->name('logout');
 
         // Optional Logout Page
         Route::get('/logout/page', 'logoutPage')->name('logout.page');
@@ -119,6 +121,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // --------------------- Pages ------------------//
         Route::controller(EmployeeGradeController::class)->group(function () {
             Route::get('employee-grade', 'employeeGrade')->name('employee-grade');
+        });
+    });
+
+    Route::middleware('auth')->group(function () {
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::controller(UserController::class)->group(function () {
+                Route::get('user-data', 'userData')->name('user-data');
+                Route::get('user-add', 'userAdd')->name('user-add');
+            });
         });
     });
 

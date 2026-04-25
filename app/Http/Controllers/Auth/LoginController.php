@@ -33,7 +33,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             return redirect()->route('dashboard')
-                ->with('success', 'Login berhasil.');
+                ->with('modal_success', 'Login berhasil masuk sistem.');
         }
 
         return back()->withErrors([
@@ -52,8 +52,7 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')
-            ->with('success', 'Berhasil logout.');
+        return redirect()->route('login');
     }
 
     /**

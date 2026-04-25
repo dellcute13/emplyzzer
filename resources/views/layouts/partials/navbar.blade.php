@@ -14,7 +14,7 @@
         </button>
         <div class="flex items-center space-x-3 cursor-pointer pl-6 border-l border-slate-200">
             <div class="text-right">
-                <p class="text-xs font-bold text-slate-900 leading-none">Administrator</p>
+                <p class="text-xs font-bold text-slate-900 leading-none">{{ Auth::user()->name }}</p>
                 <p class="text-[10px] text-slate-500 uppercase tracking-tighter">System Manager</p>
             </div>
             <img alt="Administrator Profile" class="w-10 h-10 rounded-full border-2 border-primary-fixed object-cover"

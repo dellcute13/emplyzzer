@@ -7,11 +7,11 @@
             <p class="font-body-md text-body-md text-on-surface-variant">Konfigurasi parameter untuk perhitungan Simple
                 Additive Weighting (SAW).</p>
         </div>
-        <button
+        <a href="{{ route('criteria.criteria-data') }}"
             class="flex items-center space-x-2 text-on-primary-fixed-variant hover:text-primary transition-colors font-label-sm text-label-sm">
             <span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
             <span>Kembali ke Daftar</span>
-        </button>
+        </a>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
             <div class="lg:col-span-2 space-y-lg">

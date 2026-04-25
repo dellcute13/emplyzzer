@@ -13,52 +13,53 @@
     </div>
     <nav class="flex-1 space-y-1 px-3">
         <!-- Dashboard (Active) -->
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('dashboard') }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('dashboard') }}"
             href="{{ route('dashboard') }}">
             <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
             <span class="font-sans text-sm tracking-tight">Dashboard</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['employee.employee-data', 'employee.employee-add']) }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['employee.employee-data', 'employee.employee-add']) }}"
             href="{{ route('employee.employee-data') }}">
             <span class="material-symbols-outlined" data-icon="groups">groups</span>
             <span class="font-sans text-sm tracking-tight">Data Pegawai</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['criteria.criteria-data', 'criteria.criteria-add']) }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['criteria.criteria-data', 'criteria.criteria-add']) }}"
             href="{{ route('criteria.criteria-data') }}">
             <span class="material-symbols-outlined" data-icon="format_list_bulleted">format_list_bulleted</span>
             <span class="font-sans text-sm tracking-tight">Kriteria Penilaian</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('employee-grade') }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('employee-grade') }}"
             href="{{ route('employee-grade') }}">
             <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
             <span class="font-sans text-sm tracking-tight">Nilai Pegawai</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200  {{ set_active('sawprocess-data') }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200  {{ set_active('sawprocess-data') }}"
             href="{{ route('sawprocess-data') }}">
             <span class="material-symbols-outlined" data-icon="calculate">calculate</span>
             <span class="font-sans text-sm tracking-tight">Proses SAW</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200  {{ set_active('employee-rank') }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200  {{ set_active('employee-rank') }}"
             href="{{ route('employee-rank') }}">
             <span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
             <span class="font-sans text-sm tracking-tight">Hasil Ranking</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('report-data') }}"
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('report-data') }}"
             href="{{ route('report-data') }}">
             <span class="material-symbols-outlined" data-icon="description">description</span>
             <span class="font-sans text-sm tracking-tight">Laporan</span>
         </a>
         <div class="pt-4 mt-4 border-t border-slate-100">
-            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200"
-                href="#">
+            <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['users.user-data', 'users.user-add']) }}"
+                href="{{ route('users.user-data') }}">
                 <span class="material-symbols-outlined" data-icon="person_manage">person</span>
                 <span class="font-sans text-sm tracking-tight">Pengguna</span>
             </a>
-            <a class="flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/10 transition-colors duration-200"
-                href="{{ route('logout') }}">
+            <button @click="logoutModal = true" 
+                class="flex items-center rounded-md gap-3 px-4 py-3 text-error hover:bg-error-container/10 transition-colors duration-200">
+
                 <span class="material-symbols-outlined" data-icon="logout">logout</span>
                 <span class="font-sans text-sm tracking-tight">Logout</span>
-            </a>
+            </button>
         </div>
     </nav>
     <div class="px-6 mt-auto">
