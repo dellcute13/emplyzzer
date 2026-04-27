@@ -3,7 +3,8 @@
 @section('content')
     <section class="p-8 space-y-8 flex-1">
         <!-- Back Action -->
-        <a href="{{ route('users.user-data') }}" class="flex items-center text-secondary hover:underline font-label-sm text-label-sm mb-4 transition-all">
+        <a href="{{ route('users.user-data') }}"
+            class="flex items-center text-secondary hover:underline font-label-sm text-label-sm mb-4 transition-all">
             <span class="material-symbols-outlined mr-1 text-sm" data-icon="arrow_back">arrow_back</span>
             Kembali ke Daftar Pengguna
         </a>
@@ -35,33 +36,61 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="font-label-sm text-label-sm text-on-surface-variant" for="role">Peran
-                                (Role)</label>
-                            <div class="relative">
-                                <select
-                                    class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all appearance-none"
-                                    id="role">
-                                    <option disabled="" selected="" value="">Pilih peran...</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="manager">Manager</option>
-                                    <option value="staff">Staff</option>
-                                </select>
-                                <span
-                                    class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-outline"
-                                    data-icon="expand_more">expand_more</span>
+                        <div x-data="{ open: false, selected: 'Pilih Peran...' }" class="space-y-2">
+                            <label class="block text-sm font-semibold text-slate-700">
+                                Peran (Role)
+                            </label>
+                            <button type="button" @click="open = !open" @click.away="open = false"
+                                class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-1 focus:ring-primary-container">
+
+                                <span class="text-left"
+                                    :class="selected == 'Pilih peran...' ? 'text-slate-400' : 'text-slate-800'"
+                                    x-text="selected">
+                                </span>
+
+                                <span class="material-symbols-outlined text-outline transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''">
+                                    expand_more
+                                </span>
+
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
+                                <button type="button" @click="selected='Admin'; open=false"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    <span>Admin</span>
+                                </button>
+                                <button type="button" @click="selected='Manager'; open=false"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+                                    <span>Manager</span>
+                                </button>
+                                <button type="button" @click="selected='Staff'; open=false"
+                                    class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+                                    <span>Staff</span>
+                                </button>
                             </div>
                         </div>
                         <div class="space-y-2 relative">
-                            <label class="font-label-sm text-label-sm text-on-surface-variant" for="password">Kata
-                                Sandi</label>
-                            <div class="relative">
-                                <input
-                                    class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all"
-                                    id="password" placeholder="Min. 8 karakter" type="password" />
-                                <span
-                                    class="material-symbols-outlined absolute right-3 top-3 cursor-pointer text-outline hover:text-primary transition-colors"
-                                    data-icon="visibility">visibility</span>
+                            <div x-data="{ showPassword: false }" class="space-y-2 relative">
+                                <label class="font-label-sm text-label-sm text-on-surface-variant" for="password">
+                                    Kata Sandi
+                                </label>
+                                <div class="relative">
+                                    <input id="password" name="password" placeholder="Min. 8 karakter"
+                                        :type="showPassword ? 'text' : 'password'"
+                                        class="w-full bg-white border border-outline-variant rounded-lg p-3 pr-12 text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all" />
+                                    <button type="button" @click="showPassword = !showPassword"
+                                        class="absolute right-3 top-3 text-outline hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined"
+                                            x-text="showPassword ? 'visibility_off' : 'visibility'">
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,15 +115,31 @@
                 <!-- Status Toggle Card -->
                 <div class="bg-white p-lg rounded-xl border border-slate-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                     <h3 class="font-headline-md text-headline-md text-primary-container mb-4">Status Akun</h3>
-                    <div class="flex items-center justify-between p-4 bg-surface rounded-lg border border-slate-100">
+                    <div x-data="{ active: true }"
+                        class="flex items-center justify-between p-4 bg-surface rounded-lg border border-slate-100">
+
+                        {{-- Text --}}
                         <div class="flex flex-col">
-                            <span class="font-label-sm text-label-sm text-on-surface">Status Aktif</span>
-                            <span class="text-[11px] text-on-surface-variant">Izinkan akses login segera</span>
+                            <span class="font-label-sm text-label-sm text-on-surface">
+                                Status Aktif
+                            </span>
+
+                            <span class="text-[11px] text-on-surface-variant">
+                                Izinkan akses login segera
+                            </span>
                         </div>
-                        <button
-                            class="w-12 h-6 bg-secondary-container rounded-full relative p-1 flex items-center justify-end transition-all">
-                            <div class="w-4 h-4 bg-white rounded-full shadow-md"></div>
+
+                        {{-- Switch --}}
+                        <button @click="active = !active" :class="active ? 'bg-secondary-container' : 'bg-slate-300'"
+                            class="w-12 h-6 rounded-full relative p-1 transition-all duration-300">
+
+                            {{-- Circle --}}
+                            <div :class="active ? 'translate-x-3' : 'translate-x-0'"
+                                class="w-4 h-4 bg-white rounded-full shadow-md transform transition-all duration-300">
+                            </div>
+
                         </button>
+
                     </div>
                     <div class="mt-4 p-3 bg-secondary-container/10 border border-secondary-container/20 rounded-lg">
                         <p class="text-[12px] text-on-secondary-fixed-variant leading-relaxed">

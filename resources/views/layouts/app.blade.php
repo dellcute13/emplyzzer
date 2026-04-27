@@ -9,6 +9,7 @@
     <meta name="description" content="Emplyzer Selection - SAW Method System">
     <meta name="author" content="Emplyzzer">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Emplyzer Dashboard' }}</title>
 
     {{-- Vite Assets --}}

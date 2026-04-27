@@ -15,35 +15,90 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
             <!-- Left Column: Photo Upload -->
             <div class="lg:col-span-4 space-y-lg">
-                <div class="bg-white rounded-xl custom-shadow border border-slate-100 p-lg">
+                <div class="bg-white rounded-xl custom-shadow border border-slate-100 p-lg" x-data="photoUploader()">
                     <h3 class="text-headline-md font-headline-md text-primary-container mb-md flex items-center gap-2">
-                        <span class="material-symbols-outlined text-secondary" data-icon="add_a_photo">add_a_photo</span>
+                        <span class="material-symbols-outlined text-secondary">
+                            add_a_photo
+                        </span>
                         Foto Profil
                     </h3>
                     <div class="relative group">
-                        <div
-                            class="aspect-square w-full rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-secondary/50">
-                            <img alt="Employee Placeholder" class="w-full h-full object-cover opacity-20 grayscale"
-                                data-alt="Abstract minimalist silhouette of a person on a soft gray background with clean lines and geometric shapes"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuzBkqWpTV5sMrUGEHCO4UhD16PjN81AT9-WEn2ecZHxXrOoAM8734fZVVM28wYrjhVsy82WClISxcjpNISUNo3o-nmbzSKJUCdh5XdY3BDz3yXZV7bvDL-CR_ugrLUPr3egxvZ6XLSyZ8tnlRzQVjoUPGSS7pN3QzAfMHYOEecEXpnc4VvBUKzJl-jpSvem8qTAEC9wKpVlRKdjtEbO9oc7WfLXjFpB3mpOO-3zgq1kifABbSe67OfEBJucapph2DZ-jCVqTC_vCu" />
-                            <div
-                                class="absolute inset-0 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] opacity-100 group-hover:opacity-0 transition-opacity">
-                                <span class="material-symbols-outlined text-slate-400 text-4xl mb-2"
-                                    data-icon="cloud_upload">cloud_upload</span>
-                                <span class="text-label-sm font-label-sm text-slate-500">Unggah Foto</span>
-                            </div>
-                            <div
-                                class="absolute inset-0 flex flex-col items-center justify-center bg-primary-container/60 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <span class="material-symbols-outlined text-white text-4xl mb-2"
-                                    data-icon="edit">edit</span>
-                                <span class="text-label-sm font-label-sm text-white">Ganti Foto</span>
-                            </div>
+                        <input type="file" name="photo" accept="image/*" class="hidden" x-ref="file"
+                            @change="previewImage($event)">
+                        <div @click="$refs.file.click()"
+                            class="aspect-square w-full rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer group-hover:border-secondary/50">
+                            <template x-if="imageUrl && !resultUrl">
+                                <img :src="imageUrl" class="w-full h-full object-cover">
+                            </template>
+
+                            {{-- Preview Result AI --}}
+                            <template x-if="resultUrl">
+                                <img :src="resultUrl" class="w-full h-full object-cover">
+                            </template>
+                            <template x-if="!imageUrl && !resultUrl">
+                                <div class="text-center">
+                                    <span class="material-symbols-outlined text-slate-400 text-4xl mb-2">
+                                        cloud_upload
+                                    </span>
+                                    <p class="text-sm text-slate-500">
+                                        Unggah Foto
+                                    </p>
+                                </div>
+                            </template>
                         </div>
                     </div>
-                    <div class="mt-md space-y-2">
-                        <p class="text-xs text-slate-500 text-center italic">Rekomendasi: File format JPG/PNG, ukuran maks
-                            2MB (Ratio 1:1)</p>
+                    {{-- Hidden final path untuk dikirim ke Laravel --}}
+                    <input type="hidden" name="photo_ai" x-model="photoAi">
+                    <div class="mt-4 space-y-3">
+                        <button type="button" x-show="imageUrl && !resultUrl" @click="generateAI()"
+                            class="w-full bg-slate-900 text-white py-3 rounded-xl font-semibold">
+                            <span x-show="!loading">Generate AI Background</span>
+                            <span x-show="loading">Processing...</span>
+                        </button>
+                        <button type="button" x-show="resultUrl" @click="usePhoto()"
+                            class="w-full bg-emerald-500 text-white py-3 rounded-xl font-semibold">
+                            Gunakan Foto Ini
+                        </button>
+                        <button type="button" x-show="imageUrl" @click="$refs.file.click()"
+                            class="w-full border border-slate-200 py-3 rounded-xl font-semibold text-slate-600">
+                            Ganti Foto
+                        </button>
+                        <div class="grid grid-cols-2 gap-3" x-show="imageUrl && !resultUrl">
+                            <label @click="size = '3x4'"
+                                :class="size === '3x4'
+                                    ?
+                                    'border-secondary bg-secondary/10 text-secondary' :
+                                    'border-slate-200 bg-white text-slate-600'"
+                                class="cursor-pointer rounded-xl border-2 p-4 transition-all">
+                                <input type="radio" value="3x4" x-model="size" class="hidden">
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-10 h-14 rounded-md border-2 border-current"></div>
+                                    <div class="text-center">
+                                        <p class="font-semibold">3x4</p>
+                                        <p class="text-xs opacity-70">Standar Pegawai</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <label @click="size = '4x6'"
+                                :class="size === '4x6'
+                                    ?
+                                    'border-secondary bg-secondary/10 text-secondary' :
+                                    'border-slate-200 bg-white text-slate-600'"
+                                class="cursor-pointer rounded-xl border-2 p-4 transition-all">
+                                <input type="radio" value="4x6" x-model="size" class="hidden">
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-10 h-16 rounded-md border-2 border-current"></div>
+                                    <div class="text-center">
+                                        <p class="font-semibold">4x6</p>
+                                        <p class="text-xs opacity-70">Lebih Tinggi</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
                     </div>
+                    <p class="text-xs text-slate-500 text-center italic mt-3">
+                        JPG/PNG maks 2MB
+                    </p>
                 </div>
                 <!-- Informational Card -->
                 <div class="bg-secondary-container/5 rounded-xl border border-secondary/10 p-lg">
@@ -91,57 +146,132 @@
                             </div>
                             <!-- Position -->
                             <div class="space-y-xs">
-                                <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
-                                    Jabatan / Posisi <span class="text-error">*</span>
-                                </label>
-                                <div class="relative">
-                                    <select
-                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none appearance-none transition-all">
-                                        <option disabled="" selected="" value="">Pilih Jabatan</option>
-                                        <option>Senior Analyst</option>
-                                        <option>Division Head</option>
-                                        <option>Lead Engineer</option>
-                                        <option>Marketing Manager</option>
-                                        <option>Operation Staff</option>
-                                    </select>
-                                    <span
-                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
-                                        data-icon="expand_more">expand_more</span>
+                                <div x-data="{ open: false, selected: 'Pilih Jabatan' }" class="space-y-2 relative">
+                                    <label
+                                        class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+                                        Jabatan / Posisi
+                                        <span class="text-error">*</span>
+                                    </label>
+                                    <input type="hidden" name="position" :value="selected">
+                                    <button type="button" @click="open = !open" @click.away="open = false"
+                                        class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container">
+                                        <span class="text-left"
+                                            :class="selected == 'Pilih Jabatan' ? 'text-slate-400' : 'text-slate-800'"
+                                            x-text="selected">
+                                        </span>
+                                        <span
+                                            class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                            :class="open ? 'rotate-180' : ''">
+                                            expand_more
+                                        </span>
+                                    </button>
+                                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                        class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                                        <button type="button" @click="selected='Senior Analyst'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                            Senior Analyst
+                                        </button>
+                                        <button type="button" @click="selected='Division Head'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Division Head
+                                        </button>
+                                        <button type="button" @click="selected='Lead Engineer'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Lead Engineer
+                                        </button>
+                                        <button type="button" @click="selected='Marketing Manager'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Marketing Manager
+                                        </button>
+                                        <button type="button" @click="selected='Operation Staff'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Operation Staff
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Department -->
                             <div class="space-y-xs">
-                                <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
-                                    Departemen <span class="text-error">*</span>
-                                </label>
-                                <div class="relative">
-                                    <select
-                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none appearance-none transition-all">
-                                        <option disabled="" selected="" value="">Pilih Departemen</option>
-                                        <option>Teknologi Informasi</option>
-                                        <option>Keuangan &amp; Akuntansi</option>
-                                        <option>Sumber Daya Manusia</option>
-                                        <option>Pemasaran &amp; Kreatif</option>
-                                        <option>Operasional</option>
-                                    </select>
-                                    <span
-                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
-                                        data-icon="expand_more">expand_more</span>
+                                <div x-data="{ open: false, selected: 'Pilih Departemen' }" class="space-y-2 relative">
+                                    <label
+                                        class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+                                        Departemen
+                                        <span class="text-error">*</span>
+                                    </label>
+                                    <input type="hidden" name="department" :value="selected">
+                                    <button type="button" @click="open = !open" @click.away="open = false"
+                                        class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container">
+                                        <span class="text-left"
+                                            :class="selected == 'Pilih Departemen' ? 'text-slate-400' : 'text-slate-800'"
+                                            x-text="selected">
+                                        </span>
+                                        <span
+                                            class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                            :class="open ? 'rotate-180' : ''">
+                                            expand_more
+                                        </span>
+                                    </button>
+                                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                        class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                                        <button type="button" @click="selected='Teknologi Informasi'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                            Teknologi Informasi
+                                        </button>
+                                        <button type="button" @click="selected='Keuangan &amp; Akuntansi'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Keuangan &amp; Akuntansi
+                                        </button>
+                                        <button type="button" @click="selected='Sumber Daya Manusia'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Sumber Daya Manusia
+                                        </button>
+                                        <button type="button" @click="selected='Pemasaran &amp; Kreatif'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Pemasaran &amp; Kreatif
+                                        </button>
+                                        <button type="button" @click="selected='Operasional'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Operasional
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Join Date -->
-                            <div class="space-y-xs">
+                            <div class="space-y-2">
+
                                 <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
-                                    Tanggal Bergabung <span class="text-error">*</span>
+                                    Tanggal Bergabung
+                                    <span class="text-error">*</span>
                                 </label>
+
                                 <div class="relative">
-                                    <input
-                                        class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all"
-                                        type="date" />
-                                    <span
-                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
-                                        data-icon="calendar_today">calendar_today</span>
+
+                                    {{-- Input --}}
+                                    <input id="join_date" name="join_date" type="text" placeholder="Pilih tanggal"
+                                        class="w-full bg-white border border-outline-variant rounded-lg p-3 pr-12 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all">
+
+                                    {{-- Calendar Icon --}}
+                                    <button type="button" tabindex="-1"
+                                        class="absolute right-3 top-2.5 text-outline hover:text-primary transition-colors pointer-events-none">
+
+                                        <span class="material-symbols-outlined">
+                                            event
+                                        </span>
+
+                                    </button>
+
                                 </div>
+
                             </div>
                             <!-- Status -->
                             <div class="space-y-xs">
@@ -199,3 +329,78 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#join_date", {
+                locale: Indonesian,
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d F Y",
+                allowInput: false,
+                appendTo: document.body,
+            });
+        });
+    </script>
+    <script>
+        function photoUploader() {
+            return {
+                imageUrl: null,
+                resultUrl: null,
+                loading: false,
+                file: null,
+                photoAi: '',
+                size: '3x4',
+
+                previewImage(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    this.file = file;
+                    this.resultUrl = null;
+                    this.photoAi = '';
+                    this.imageUrl = URL.createObjectURL(file);
+                },
+
+                async generateAI() {
+                    this.loading = true;
+
+                    console.log("Ukuran dipilih:", this.size);
+
+                    let formData = new FormData();
+                    formData.append('photo', this.file);
+                    formData.append('size', this.size);
+
+                    try {
+
+                        let csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+
+                        let response = await fetch('/generate-photo-ai', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-TOKEN': csrf
+                            }
+                        });
+
+                        let data = await response.json();
+
+                        if (data.success) {
+                            this.resultUrl = data.url;
+                            this.photoAi = data.path;
+                        } else {
+                            alert('Generate gagal');
+                        }
+
+                    } catch (error) {
+                        console.log(error);
+                        alert('Terjadi error');
+                    }
+
+                    this.loading = false;
+                }
+            }
+        }
+    </script>
+@endpush
