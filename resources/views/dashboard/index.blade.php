@@ -64,6 +64,35 @@
                     <span class="material-symbols-outlined text-slate-900" data-icon="avg_time">avg_time</span>
                 </div>
             </div>
+            <!-- Card 5 --->
+             <div class="bg-white p-lg rounded-xl border border-slate-200 ambient-shadow">
+        <div class="space-y-sm mb-4">
+            <p class="text-label-sm text-on-primary-container font-label-sm uppercase tracking-wider">
+                Gender Pegawai
+            </p>
+            <h3 class="text-display-xl font-display-xl text-slate-900">150</h3>
+            <p class="text-[10px] text-on-primary-container font-medium">
+                Total berdasarkan jenis kelamin
+            </p>
+        </div>
+
+        <!-- Bawah -->
+        <div class="grid grid-cols-2 gap-2 mt-3">
+            <div class="bg-pink-50 rounded-lg p-3 text-center">
+                <span class="material-symbols-outlined text-pink-500 text-xl">female</span>
+                <p class="text-sm font-semibold text-slate-800">Perempuan</p>
+                <p class="text-lg font-bold text-pink-600">70</p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-3 text-center">
+                <span class="material-symbols-outlined text-blue-500 text-xl">male</span>
+                <p class="text-sm font-semibold text-slate-800">Laki-laki</p>
+                <p class="text-lg font-bold text-blue-600">80</p>
+            </div>
+        </div>
+    </div>
+
+
         </div>
         <!-- Main Section: Charts & Tables -->
         <div class="grid grid-cols-12 gap-gutter">
