@@ -144,6 +144,57 @@
                                     class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all"
                                     placeholder="Contoh: 19880521XXXXXXXX" type="text" />
                             </div>
+                            <!-- Gender Pegawai -->
+                            <div class="space-y-xs">
+                                <div x-data="{ open: false, selected: 'Pilih Gender Pegawai' }" class="space-y-2 relative">
+
+                                    <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+                                        Gender Pegawai
+                                        <span class="text-error">*</span>
+                                    </label>
+
+                                    <input type="hidden" name="gender" :value="selected">
+
+                                    <button type="button"
+                                        @click="open = !open"
+                                        @click.away="open = false"
+                                        class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container">
+
+                                        <span class="text-left"
+                                            :class="selected == 'Pilih Gender Pegawai' ? 'text-slate-400' : 'text-slate-800'"
+                                            x-text="selected">
+                                        </span>
+
+                                        <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                            :class="open ? 'rotate-180' : ''">
+                                            expand_more
+                                        </span>
+                                    </button>
+
+                                    <div x-show="open"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                        x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                        x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                        class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+
+                                        <button type="button"
+                                            @click="selected='Laki-laki'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                            Laki-laki
+                                        </button>
+
+                                        <button type="button"
+                                            @click="selected='Perempuan'; open=false"
+                                            class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                            Perempuan
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Position -->
                             <div class="space-y-xs">
                                 <div x-data="{ open: false, selected: 'Pilih Jabatan' }" class="space-y-2 relative">
@@ -197,17 +248,17 @@
                             </div>
                             <!-- Department -->
                             <div class="space-y-xs">
-                                <div x-data="{ open: false, selected: 'Pilih Departemen' }" class="space-y-2 relative">
+                                <div x-data="{ open: false, selected: 'Pilih Divisi/Unit' }" class="space-y-2 relative">
                                     <label
                                         class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
-                                        Departemen
+                                        Divisi/Unit
                                         <span class="text-error">*</span>
                                     </label>
                                     <input type="hidden" name="department" :value="selected">
                                     <button type="button" @click="open = !open" @click.away="open = false"
                                         class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container">
                                         <span class="text-left"
-                                            :class="selected == 'Pilih Departemen' ? 'text-slate-400' : 'text-slate-800'"
+                                            :class="selected == 'Pilih Divisi/Unit' ? 'text-slate-400' : 'text-slate-800'"
                                             x-text="selected">
                                         </span>
                                         <span
@@ -283,7 +334,7 @@
                                         <input checked="" class="w-4 h-4 text-secondary focus:ring-secondary"
                                             name="status" type="radio" />
                                         <span
-                                            class="text-body-md font-body-md text-slate-700 group-hover:text-secondary transition-colors">Permanen</span>
+                                            class="text-body-md font-body-md text-slate-700 group-hover:text-secondary transition-colors">Tetap</span>
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer group">
                                         <input class="w-4 h-4 text-secondary focus:ring-secondary" name="status"

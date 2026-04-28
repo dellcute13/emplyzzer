@@ -60,6 +60,7 @@
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Foto</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">NIP</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Nama</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking -winder">Gender Pegawai</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Jabatan</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Divisi/Unit</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-right">Aksi</th>
@@ -78,6 +79,12 @@
                             <td class="px-6 py-4">
                                 <div class="font-semibold text-slate-900">Aditya Pratama</div>
                                 <div class="text-xs text-slate-400">aditya.p@company.com</div>
+                            </td>
+
+                            <td class="px-4 py-5">
+                                <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                                    Laki-laki
+                                </span>
                             </td>
                             <td class="px-6 py-4">
                                 <span
@@ -112,6 +119,12 @@
                                 <div class="font-semibold text-slate-900">Siti Rahayu</div>
                                 <div class="text-xs text-slate-400">siti.rahayu@company.com</div>
                             </td>
+
+                            <td class="px-4 py-5">
+                                <span class="px-3 py-1 rounded-full text-sm bg-pink-100 text-pink-700">
+                                     Perempuan
+                                </span>
+                            </td>
                             <td class="px-6 py-4">
                                 <span
                                     class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-xs font-medium rounded-full">HR
@@ -144,6 +157,12 @@
                             <td class="px-6 py-4">
                                 <div class="font-semibold text-slate-900">Budi Santoso</div>
                                 <div class="text-xs text-slate-400">budi.s@company.com</div>
+                            </td>
+
+                            <td class="px-4 py-5">
+                                <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                                    Laki-laki
+                                </span>
                             </td>
                             <td class="px-6 py-4">
                                 <span
@@ -178,6 +197,12 @@
                                 <div class="font-semibold text-slate-900">Indah Lestari</div>
                                 <div class="text-xs text-slate-400">indah.l@company.com</div>
                             </td>
+
+                            <td class="px-4 py-5">
+                                <span class="px-3 py-1 rounded-full text-sm bg-pink-100 text-pink-700">
+                                     Perempuan
+                                </span>
+                            </td>
                             <td class="px-6 py-4">
                                 <span class="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">UI/UX
                                     Designer</span>
@@ -209,6 +234,12 @@
                             <td class="px-6 py-4">
                                 <div class="font-semibold text-slate-900">Rizky Ramadhan</div>
                                 <div class="text-xs text-slate-400">rizky.r@company.com</div>
+                            </td>
+
+                            <td class="px-4 py-5">
+                                <span class="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                                    Laki-laki
+                                </span>
                             </td>
                             <td class="px-6 py-4">
                                 <span
