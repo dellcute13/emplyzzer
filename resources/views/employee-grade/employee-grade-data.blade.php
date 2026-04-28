@@ -25,19 +25,70 @@
                         </div>
                     </div>
                     <div class="relative">
-                        <label class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">Nama Lengkap
-                            atau
-                            NIP</label>
-                        <select
-                            class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-body-md focus:border-secondary focus:ring-1 focus:ring-secondary transition-all appearance-none cursor-pointer">
-                            <option disabled="" selected="" value="">Pilih salah satu pegawai...</option>
-                            <option value="1">Budi Setiawan (NIP: 198203102005011001)</option>
-                            <option value="2">Siti Aminah (NIP: 198505222010122003)</option>
-                            <option value="3">Andi Wijaya (NIP: 199008152015031005)</option>
-                            <option value="4">Rina Marlina (NIP: 199312302018012002)</option>
-                        </select>
-                        <span
-                            class="material-symbols-outlined absolute right-3 bottom-3.5 pointer-events-none text-outline">expand_more</span>
+                        <div class="space-y-xs">
+                            <div x-data="{
+                                open: false,
+                                selected: 'Pilih salah satu pegawai...',
+                                search: '',
+                                employees: [
+                                    'Budi Setiawan (NIP: 198203102005011001)',
+                                    'Siti Aminah (NIP: 198505222010122003)',
+                                    'Andi Wijaya (NIP: 199008152015031005)',
+                                    'Rina Marlina (NIP: 199312302018012002)'
+                                ],
+                            
+                                get filteredEmployees() {
+                                    return this.employees.filter(item =>
+                                        item.toLowerCase().includes(this.search.toLowerCase())
+                                    )
+                                }
+                            }" class="space-y-2 relative">
+                                <label class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">
+                                    Nama Lengkap atau NIP
+                                </label>
+                                <input type="hidden" name="employee" :value="selected">
+                                <button type="button" @click="open = !open; if(open) $nextTick(() => $refs.search.focus())"
+                                    @click.away="open = false"
+                                    class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:ring-2 focus:ring-primary-container">
+
+                                    <span class="text-left truncate"
+                                        :class="selected == 'Pilih salah satu pegawai...' ? 'text-slate-400' : 'text-slate-800'"
+                                        x-text="selected">
+                                    </span>
+                                    <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                        :class="open ? 'rotate-180' : ''">
+                                        expand_more
+                                    </span>
+                                </button>
+                                <div x-show="open" x-transition
+                                    class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                                    <div class="p-3 border-b border-slate-100">
+                                        <div class="relative">
+                                            <input type="text" x-ref="search" x-model="search"
+                                                placeholder="Cari nama pegawai / NIP..."
+                                                class="w-full rounded-lg border border-slate-200 pl-10 pr-3 py-2 text-sm focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none">
+
+                                            <span
+                                                class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[20px]">
+                                                search
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="max-h-64 overflow-y-auto">
+                                        <template x-for="item in filteredEmployees" :key="item">
+                                            <button type="button" @click="selected = item; open = false; search=''"
+                                                class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-b border-slate-100 transition">
+                                                <span x-text="item"></span>
+                                            </button>
+                                        </template>
+                                        <div x-show="filteredEmployees.length === 0"
+                                            class="px-4 py-5 text-sm text-center text-slate-400">
+                                            Pegawai tidak ditemukan
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- Assessment Form -->
@@ -47,20 +98,31 @@
                     </div>
                     <div class="p-lg space-y-8">
                         <!-- Criteria Row 1: Numeric Input -->
-                        <div class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
+                        <div x-data="{ score: 75 }"
+                            class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
+
                             <div class="md:w-1/3">
-                                <label class="font-headline-md text-sm block mb-1">Kualitas Kerja (C1)</label>
-                                <p class="text-xs text-on-surface-variant">Akurasi dan ketelitian dalam penyelesaian tugas
-                                    harian.</p>
+                                <label class="font-headline-md text-sm block mb-1">
+                                    Kualitas Kerja (C1)
+                                </label>
+
+                                <p class="text-xs text-on-surface-variant">
+                                    Akurasi dan ketelitian dalam penyelesaian tugas harian.
+                                </p>
                             </div>
+
                             <div class="md:w-2/3 flex items-center gap-4">
-                                <input
-                                    class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary"
-                                    max="100" min="1" type="range" value="75" />
-                                <input
-                                    class="w-20 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-center text-body-md font-bold text-secondary"
-                                    type="number" value="75" />
+
+                                <!-- Range -->
+                                <input x-model="score" min="1" max="100" type="range"
+                                    class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary">
+
+                                <!-- Number -->
+                                <input x-model="score" min="1" max="100" type="number"
+                                    class="w-20 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-center text-body-md font-bold text-secondary focus:ring-1 focus:ring-secondary outline-none">
+
                             </div>
+
                         </div>
                         <!-- Criteria Row 2: Range Selection -->
                         <div class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
@@ -86,38 +148,67 @@
                             </div>
                         </div>
                         <!-- Criteria Row 3: Numeric Input -->
-                        <div class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
+                        <div x-data="overtimeCalculator()"
+                            class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
                             <div class="md:w-1/3">
-                                <label class="font-headline-md text-sm block mb-1">Lama Lembur (C3)</label>
-                                <p class="text-xs text-on-surface-variant">Total jam kerja tambahan yang dilakukan (dalam
-                                    jam).
+                                <label class="font-headline-md text-sm block mb-1">
+                                    Lama Lembur (C3)
+                                </label>
+                                <p class="text-xs text-on-surface-variant">
+                                    Pilih jam mulai dan selesai lembur.
                                 </p>
                             </div>
-                            <div class="md:w-2/3 flex items-center gap-4">
-                                <div class="relative w-full">
-                                    <input
-                                        class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 text-body-md focus:border-secondary focus:ring-1 focus:ring-secondary"
-                                        placeholder="0" type="number" />
-                                    <span
-                                        class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-on-surface-variant font-bold">JAM</span>
+                            <div class="md:w-2/3 space-y-4 w-full">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <input id="start_time" type="text" placeholder="Jam Mulai"
+                                            class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 text-body-md focus:ring-1 focus:ring-secondary outline-none h-11">
+                                        <button type="button" tabindex="-1"
+                                            class="absolute right-3 top-2.5 text-outline hover:text-primary transition-colors pointer-events-none">
+                                            <span class="material-symbols-outlined">
+                                                schedule
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div class="relative">
+                                        <input id="end_time" type="text" placeholder="Jam Selesai"
+                                            class="w-full bg-surface border border-outline-variant rounded-lg px-4 py-2 text-body-md focus:ring-1 focus:ring-secondary outline-none h-11">
+                                        <button type="button" tabindex="-1"
+                                            class="absolute right-3 top-2.5 text-outline hover:text-primary transition-colors pointer-events-none">
+                                            <span class="material-symbols-outlined">
+                                                schedule
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
+                                <div class="rounded-xl bg-secondary/10 border border-secondary/20 px-4 py-3">
+                                    <p class="text-[11px] uppercase text-slate-500 mb-1">
+                                        Total Jam Lembur
+                                    </p>
+                                    <p class="text-lg font-bold text-slate-800">
+                                        <span x-text="totalHours"></span> Jam
+                                    </p>
+                                </div>
+                                <input type="hidden" name="overtime_hours" :value="totalHours">
                             </div>
                         </div>
                         <!-- Criteria Row 4: Range Selection -->
-                        <div class="flex flex-col md:flex-row md:items-center gap-6">
+                        <div x-data="{ score: 85 }"
+                            class="flex flex-col md:flex-row md:items-center gap-6 pb-6 border-b border-surface-variant">
                             <div class="md:w-1/3">
-                                <label class="font-headline-md text-sm block mb-1">Perilaku (C4)</label>
-                                <p class="text-xs text-on-surface-variant">Etika kerja, kerjasama tim, dan inisiatif
+                                <label class="font-headline-md text-sm block mb-1">
+                                    Perilaku (C4)
+                                </label>
+                                <p class="text-xs text-on-surface-variant">
+                                    Etika kerja, kerjasama tim, dan inisiatif
                                     pribadi.
                                 </p>
                             </div>
                             <div class="md:w-2/3 flex items-center gap-4">
-                                <input
-                                    class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary"
-                                    max="100" min="1" type="range" value="85" />
-                                <input
-                                    class="w-20 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-center text-body-md font-bold text-secondary"
-                                    type="number" value="85" />
+                                <input x-model="score" min="1" max="100" type="range"
+                                    class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary">
+                                <input x-model="score" min="1" max="100" type="number"
+                                    class="w-20 bg-surface border border-outline-variant rounded-lg px-3 py-2 text-center text-body-md font-bold text-secondary focus:ring-1 focus:ring-secondary outline-none">
                             </div>
                         </div>
                     </div>
@@ -200,3 +291,59 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        function overtimeCalculator() {
+            return {
+                totalHours: 0,
+
+                init() {
+
+                    let self = this;
+
+                    flatpickr("#start_time", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true,
+                        onChange() {
+                            self.calculate();
+                        }
+                    });
+
+                    flatpickr("#end_time", {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true,
+                        onChange() {
+                            self.calculate();
+                        }
+                    });
+                },
+
+                calculate() {
+
+                    let start = document.getElementById('start_time').value;
+                    let end = document.getElementById('end_time').value;
+
+                    if (!start || !end) return;
+
+                    let [sh, sm] = start.split(':').map(Number);
+                    let [eh, em] = end.split(':').map(Number);
+
+                    let startMinutes = (sh * 60) + sm;
+                    let endMinutes = (eh * 60) + em;
+
+                    if (endMinutes < startMinutes) {
+                        endMinutes += 1440;
+                    }
+
+                    let diff = endMinutes - startMinutes;
+
+                    this.totalHours = (diff / 60).toFixed(1);
+                }
+            }
+        }
+    </script>
+@endpush

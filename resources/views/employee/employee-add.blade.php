@@ -299,30 +299,20 @@
                             </div>
                             <!-- Join Date -->
                             <div class="space-y-2">
-
                                 <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
                                     Tanggal Bergabung
                                     <span class="text-error">*</span>
                                 </label>
-
                                 <div class="relative">
-
-                                    {{-- Input --}}
                                     <input id="join_date" name="join_date" type="text" placeholder="Pilih tanggal"
                                         class="w-full bg-white border border-outline-variant rounded-lg p-3 pr-12 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none transition-all">
-
-                                    {{-- Calendar Icon --}}
                                     <button type="button" tabindex="-1"
                                         class="absolute right-3 top-2.5 text-outline hover:text-primary transition-colors pointer-events-none">
-
                                         <span class="material-symbols-outlined">
                                             event
                                         </span>
-
                                     </button>
-
                                 </div>
-
                             </div>
                             <!-- Status -->
                             <div class="space-y-xs">
