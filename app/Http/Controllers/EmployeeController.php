@@ -73,7 +73,7 @@ class EmployeeController extends Controller
         // path python
         $size = $request->size ?? '3x4';
 
-        $python = "python";
+        $python = "C:\Users\zacky\AppData\Local\Programs\Python\Python312\python.exe";
         $script = base_path('scripts/process_photo.py');
 
         exec("\"$python\" \"$script\" \"$tempPath\" \"$finalPath\" \"$size\"");
