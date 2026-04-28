@@ -117,7 +117,7 @@
                                 <div class="relative">
                                     <select
                                         class="w-full bg-white border border-outline-variant rounded-lg px-4 py-3 text-body-md font-body-md focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none appearance-none transition-all">
-                                        <option disabled="" selected="" value="">Pilih Departemen</option>
+                                        <option disabled="" selected="" value="">Pilih Divisi/Unit</option>
                                         <option>Teknologi Informasi</option>
                                         <option>Keuangan &amp; Akuntansi</option>
                                         <option>Sumber Daya Manusia</option>
