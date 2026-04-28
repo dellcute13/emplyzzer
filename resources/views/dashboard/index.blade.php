@@ -199,7 +199,7 @@
                                 Pegawai</th>
                             <th
                                 class="px-lg py-4 text-label-sm font-label-sm text-on-primary-container uppercase tracking-wider">
-                                Devisi/Unit</th>
+                                Divisi/Unit</th>
                             <th
                                 class="px-lg py-4 text-label-sm font-label-sm text-on-primary-container uppercase tracking-wider">
                                 Nilai Akhir</th>

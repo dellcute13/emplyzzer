@@ -24,7 +24,7 @@
                     <div class="relative">
                         <select
                             class="appearance-none bg-white border border-slate-200 rounded-lg pl-4 pr-10 py-2 text-sm focus:ring-2 focus:ring-primary-fixed focus:border-primary outline-none">
-                            <option>Semua Devisi/Unit</option>
+                            <option>Semua Divisi/Unit</option>
                             <option>Teknologi Informasi</option>
                             <option>Sumber Daya Manusia</option>
                             <option>Keuangan</option>
@@ -61,7 +61,7 @@
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">NIP</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Nama</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Jabatan</th>
-                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Devisi/Unit</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider">Divisi/Unit</th>
                             <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-right">Aksi</th>
                         </tr>
                     </thead>

@@ -30,7 +30,7 @@
             <div class="col-span-12 lg:col-span-8 grid grid-cols-3 gap-6">
                 <div
                     class="bg-white podium-shadow rounded-xl p-6 border border-slate-100 flex flex-col items-center relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 group-hover:opacity-10 transition-opacity">
                         <span class="material-symbols-outlined text-6xl" data-icon="military_tech">military_tech</span>
                     </div>
                     <div class="w-16 h-16 rounded-full border-4 border-slate-100 mb-4 overflow-hidden">
@@ -68,7 +68,7 @@
                 </div>
                 <div
                     class="bg-white podium-shadow rounded-xl p-6 border border-slate-100 flex flex-col items-center relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 group-hover:opacity-10 transition-opacity">
                         <span class="material-symbols-outlined text-6xl" data-icon="award">award_star</span>
                     </div>
                     <div class="w-16 h-16 rounded-full border-4 border-slate-100 mb-4 overflow-hidden">
