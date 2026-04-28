@@ -5,7 +5,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeGradeController;
+use App\Http\Controllers\EmployeePhotoController;
 use App\Http\Controllers\EmployeeRankController;
+use App\Http\Controllers\PhotoAiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SawProcessController;
 use App\Http\Controllers\UserController;
@@ -79,6 +81,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             });
         });
     });
+
+    Route::post('/photo-process', [EmployeePhotoController::class, 'process']);
+    Route::post('/generate-photo-ai', [PhotoAiController::class, 'generate']);
+    Route::post('/generate-photo-ai', [EmployeeController::class, 'generateAI']);
+
+    Route::get('/pegawai/create', [EmployeeController::class, 'create']);
+    Route::post('/pegawai/store', [EmployeeController::class, 'store']);
 
     // Route::middleware('auth')->group(function () {
     //     // --------------------- Pages ------------------//

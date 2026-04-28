@@ -9,3 +9,92 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.flatpickr-innerContainer {
+    display: block !important;
+    width: 100% !important;
+}
+
+.flatpickr-rContainer {
+    width: 100% !important;
+}
+
+.flatpickr-days {
+    width: 100% !important;
+}
+
+.dayContainer {
+    min-width: 100% !important;
+    max-width: 100% !important;
+}
+
+.flatpickr-calendar {
+    width: auto !important;
+    min-width: 320px !important;
+    border: none !important;
+    border-radius: 18px !important;
+    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12) !important;
+    padding: 28px !important;
+    font-family: Inter, sans-serif !important;
+}
+
+.flatpickr-innerContainer {
+    margin: 0 !important;
+}
+
+.flatpickr-weekdays {
+    padding: 2px;
+}
+
+.flatpickr-months {
+    margin-bottom: 10px;
+}
+
+.flatpickr-current-month {
+    font-weight: 700 !important;
+    color: #0f172a !important;
+}
+
+.flatpickr-day {
+    border-radius: 10px !important;
+    transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+.flatpickr-day.selected {
+    background: #0f172a !important;
+    border-color: #0f172a !important;
+    color: white !important;
+}
+
+.flatpickr-day.today {
+    border: 1px solid #0f172a !important;
+    position: relative;
+}
+
+.flatpickr-day.today::after {
+    content: "";
+    position: absolute;
+    bottom: 23px;
+    left: 70%;
+    transform: translateX(-70%);
+
+    width: 8px;
+    height: 8px;
+    margin: 3px !important;
+
+    background: #0f172a;
+    border-radius: 9999px;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    fill: #64748b !important;
+    padding-top: 30px !important;
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
