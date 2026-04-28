@@ -197,17 +197,17 @@
                             </div>
                             <!-- Department -->
                             <div class="space-y-xs">
-                                <div x-data="{ open: false, selected: 'Pilih Departemen' }" class="space-y-2 relative">
+                                <div x-data="{ open: false, selected: 'Pilih Divisi/Unit' }" class="space-y-2 relative">
                                     <label
                                         class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
-                                        Departemen
+                                        Divisi/Unit
                                         <span class="text-error">*</span>
                                     </label>
                                     <input type="hidden" name="department" :value="selected">
                                     <button type="button" @click="open = !open" @click.away="open = false"
                                         class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container">
                                         <span class="text-left"
-                                            :class="selected == 'Pilih Departemen' ? 'text-slate-400' : 'text-slate-800'"
+                                            :class="selected == 'Pilih Divisi/Unit' ? 'text-slate-400' : 'text-slate-800'"
                                             x-text="selected">
                                         </span>
                                         <span
