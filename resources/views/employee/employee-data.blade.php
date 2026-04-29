@@ -22,28 +22,86 @@
             <div class="p-6 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center">
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <select
-                            class="appearance-none bg-white border border-slate-200 rounded-lg pl-4 pr-10 py-2 text-sm focus:ring-2 focus:ring-primary-fixed focus:border-primary outline-none">
-                            <option>Semua Divisi/Unit</option>
-                            <option>Teknologi Informasi</option>
-                            <option>Sumber Daya Manusia</option>
-                            <option>Keuangan</option>
-                            <option>Operasional</option>
-                        </select>
-                        <span
-                            class="material-symbols-outlined absolute right-3 top-2.5 text-slate-400 pointer-events-none text-sm"
-                            data-icon="expand_more">expand_more</span>
+                        <div x-data="{ open: false, selected: 'Semua Divisi/Unit' }" class="space-y-2 relative">
+                            <label class="font-label-sm text-slate-700 uppercase">Tipe Pegawai</label>
+                            <input type="hidden" name="department" :value="selected">
+                            <button type="button" @click="open = !open" @click.away="open = false"
+                                class="w-full bg-white border-slate-200 border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container h-10">
+                                <span class="text-left"
+                                    :class="selected == 'Semua Divisi/Unit' ? 'text-slate-700' : 'text-slate-800'"
+                                    x-text="selected">
+                                </span>
+                                <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''">
+                                    expand_more
+                                </span>
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                                <button type="button" @click="selected='Semua Divisi/Unit'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    Semua Divisi/Unit
+                                </button>
+                                <button type="button" @click="selected='Teknologi Informasi'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    Teknologi Informasi
+                                </button>
+                                <button type="button" @click="selected='Sumber Daya Manusia'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                    Sumber Daya Manusia
+                                </button>
+                                <button type="button" @click="selected='Keuangan'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                    Keuangan
+                                </button>
+                                <button type="button" @click="selected='Operasional'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                    Operasional
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="relative">
-                        <select
-                            class="appearance-none bg-white border border-slate-200 rounded-lg pl-4 pr-10 py-2 text-sm focus:ring-2 focus:ring-primary-fixed focus:border-primary outline-none">
-                            <option>Status: Aktif</option>
-                            <option>Status: Cuti</option>
-                            <option>Status: Non-Aktif</option>
-                        </select>
-                        <span
-                            class="material-symbols-outlined absolute right-3 top-2.5 text-slate-400 pointer-events-none text-sm"
-                            data-icon="filter_list">filter_list</span>
+                        <div x-data="{ open: false, selected: 'Status: Aktif' }" class="space-y-2 relative">
+                            <label class="font-label-sm text-slate-700 uppercase">Status Pegawai</label>
+                            <input type="hidden" name="department" :value="selected">
+                            <button type="button" @click="open = !open" @click.away="open = false"
+                                class="w-full bg-white border-slate-200 border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container h-10">
+                                <span class="text-left"
+                                    :class="selected == 'Status: Aktif' ? 'text-slate-700' : 'text-slate-800'"
+                                    x-text="selected">
+                                </span>
+                                <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''">
+                                    expand_more
+                                </span>
+                            </button>
+                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                                <button type="button" @click="selected='Status: Non-Aktif'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    Status: Non-Aktif
+                                </button>
+                                <button type="button" @click="selected='Status: Aktif'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
+                                    Status: Aktif
+                                </button>
+                                <button type="button" @click="selected='Status: Cuti'; open=false"
+                                    class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
+                                    Status: Cuti
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="text-sm text-slate-500">
