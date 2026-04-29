@@ -30,7 +30,7 @@
                 <div class="space-y-sm">
                     <p class="text-label-sm text-on-primary-container font-label-sm uppercase tracking-wider">Total
                         Kriteria</p>
-                    <h3 class="text-display-xl font-display-xl text-slate-900">5</h3>
+                    <h3 class="text-display-xl font-display-xl text-slate-900">4</h3>
                     <p class="text-[10px] text-on-primary-container font-medium">Standardized Evaluation</p>
                 </div>
                 <div class="w-12 h-12 bg-tertiary-fixed rounded-full flex items-center justify-center">

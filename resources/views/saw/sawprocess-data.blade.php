@@ -70,16 +70,19 @@
                                     </th>
                                     <th
                                         class="px-6 py-4 text-xs font-bold text-slate-900 uppercase tracking-wider text-center">
-                                        C1 (KPI)</th>
+                                        C1 (Kualitas Kerja)</th>
                                     <th
                                         class="px-6 py-4 text-xs font-bold text-slate-900 uppercase tracking-wider text-center">
-                                        C2 (Attitude)</th>
+                                        C2 (Kedisiplinan)</th>
                                     <th
                                         class="px-6 py-4 text-xs font-bold text-slate-900 uppercase tracking-wider text-center">
-                                        C3 (Presence)</th>
+                                        
+                                        <div>C3</div>
+                                        <div class="mt-1 normal-case">(Lama Lembur)</div>
+                                    </th>
                                     <th
                                         class="px-6 py-4 text-xs font-bold text-slate-900 uppercase tracking-wider text-center">
-                                        C4 (Teamwork)</th>
+                                        C4 (Perilaku)</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100">
