@@ -12,7 +12,7 @@
                             <button type="button" @click="open = !open" @click.away="open = false"
                                 class="w-full bg-slate-50 border-slate-200 border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-2 focus:ring-primary-container h-11">
                                 <span class="text-left"
-                                    :class="selected == 'Monthly Performance Summary' ? 'text-slate-700' : 'text-slate-800'"
+                                    :class="selected == 'Ringkasan Kinerja Bulanan' ? 'text-slate-700' : 'text-slate-800'"
                                     x-text="selected">
                                 </span>
                                 <span class="material-symbols-outlined text-slate-400 transition-transform duration-200"
@@ -27,17 +27,17 @@
                                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
                                 class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-                                <button type="button" @click="selected='Monthly Performance Summary'; open=false"
+                                <button type="button" @click="selected='Ringkasan Kinerja Bulanan'; open=false"
                                     class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
-                                    Monthly Performance Summary
+                                    Ringkasan Kinerja Bulanan
                                 </button>
                                 <button type="button" @click="selected='Annual Executive Audit'; open=false"
                                     class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
-                                    Annual Executive Audit
+                                    Audit Eksekutif Tahunan
                                 </button>
                                 <button type="button" @click="selected='Periodical SAW Comparison'; open=false"
                                     class="w-full px-4 py-3 text-left text-sm text-slate-700 border-t border-slate-100 hover:bg-slate-50 transition">
-                                    Periodical SAW Comparison
+                                    Perbandidngan SAW Berkala
                                 </button>
                             </div>
                         </div>
@@ -74,11 +74,11 @@
             <!-- Total Reports -->
             <div class="bg-white p-lg rounded-xl custom-shadow border border-slate-100 flex items-center justify-between">
                 <div>
-                    <p class="font-label-sm text-slate-500 uppercase mb-1">Total Reports Generated</p>
+                    <p class="font-label-sm text-slate-500 uppercase mb-1">Total Laporan Dibuat</p>
                     <h3 class="font-display-xl text-slate-900">1,284</h3>
                     <p class="text-xs text-success flex items-center gap-1 mt-2">
                         <span class="material-symbols-outlined text-sm">trending_up</span>
-                        <span class="text-green-600 font-semibold">+12% from last month</span>
+                        <span class="text-green-600 font-semibold">+12% dari bulan lalu</span>
                     </p>
                 </div>
                 <div class="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center text-primary-container">
@@ -88,9 +88,9 @@
             <!-- Last Generated -->
             <div class="bg-white p-lg rounded-xl custom-shadow border border-slate-100 flex items-center justify-between">
                 <div>
-                    <p class="font-label-sm text-slate-500 uppercase mb-1">Last Generated Report</p>
-                    <h3 class="font-headline-lg text-slate-900">Oct 2023 Payroll</h3>
-                    <p class="text-xs text-slate-500 mt-2">Generated 2 hours ago</p>
+                    <p class="font-label-sm text-slate-500 uppercase mb-1">Laporan Terrakhir Dibuat</p>
+                    <h3 class="font-headline-lg text-slate-900">Penggajian Okt 2023</h3>
+                    <p class="text-xs text-slate-500 mt-2">Dibuat 2 jam yang lalu</p>
                 </div>
                 <div class="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center text-primary-container">
                     <span class="material-symbols-outlined text-3xl">schedule</span>
@@ -99,7 +99,7 @@
             <!-- High Performing Dept -->
             <div class="bg-white p-lg rounded-xl custom-shadow border border-slate-100 flex items-center justify-between">
                 <div>
-                    <p class="font-label-sm text-slate-500 uppercase mb-1">Top Performing Dept</p>
+                    <p class="font-label-sm text-slate-500 uppercase mb-1">Divisi/Unit Kinerja Terbaik</p>
                     <h3 class="font-headline-lg text-slate-900">R&amp;D Engineering</h3>
                     <p class="text-xs text-slate-500 mt-2">Score: 0.942 (SAW Index)</p>
                 </div>
@@ -113,11 +113,10 @@
             <!-- Bar Chart Comparison (Visual Analytics) -->
             <section class="lg:col-span-4 bg-white p-lg rounded-xl custom-shadow border border-slate-100">
                 <div class="flex justify-between items-center mb-xl">
-                    <h4 class="font-headline-md text-slate-900">Visual Analytics</h4>
+                    <h4 class="font-headline-md text-slate-900">Analisis Visual</h4>
                     <span class="material-symbols-outlined text-slate-400">more_horiz</span>
                 </div>
-                <p class="text-body-md text-slate-500 mb-lg leading-relaxed">Performance index comparison across major
-                    departments based on current SAW criteria.</p>
+                <p class="text-body-md text-slate-500 mb-lg leading-relaxed">Perbandingan indeks kinerja antar divisi berdasarkan kriteria SAW.</p>
                 <div class="space-y-6 mt-4">
                     <!-- Bar 1 -->
                     <div class="space-y-2">
@@ -142,7 +141,7 @@
                     <!-- Bar 3 -->
                     <div class="space-y-2">
                         <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-slate-600">
-                            <span>Human Resources</span>
+                            <span>Sumber Daya Manusia</span>
                             <span>78%</span>
                         </div>
                         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
@@ -152,7 +151,7 @@
                     <!-- Bar 4 -->
                     <div class="space-y-2">
                         <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-slate-600">
-                            <span>Sales Operations</span>
+                            <span>Operasional Penjualan</span>
                             <span>65%</span>
                         </div>
                         <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
@@ -162,7 +161,7 @@
                 </div>
                 <div class="mt-xl pt-lg border-t border-slate-100">
                     <button class="text-secondary font-semibold text-sm hover:underline flex items-center gap-1">
-                        View detailed analytics <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        Lihat Analisis Detail <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </button>
                 </div>
             </section>
@@ -170,8 +169,8 @@
             <section class="lg:col-span-8 bg-white rounded-xl custom-shadow border border-slate-100 overflow-hidden">
                 <div class="p-lg flex justify-between items-center border-b border-slate-100">
                     <div>
-                        <h4 class="font-headline-md text-slate-900">Report History</h4>
-                        <p class="text-xs text-slate-500 mt-1">Audit log of all system reports</p>
+                        <h4 class="font-headline-md text-slate-900">Riwayat Laporan</h4>
+                        <p class="text-xs text-slate-500 mt-1">Log audit seluruh laporan sistem</p>
                     </div>
                     <div class="flex gap-2">
                         <button class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50"><span
@@ -184,13 +183,13 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50/50">
-                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Report Name
+                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Nama Laporan
                                 </th>
-                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Date</th>
-                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Generated By
+                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider">Dibuat Oleh
                                 </th>
                                 <th class="px-lg py-4 font-label-sm text-slate-500 uppercase tracking-wider text-right">
-                                    Action
+                                    Aksi
                                 </th>
                             </tr>
                         </thead>
