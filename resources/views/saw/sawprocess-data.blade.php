@@ -5,7 +5,7 @@
 
         <div class="mb-10">
             <h2 class="text-3xl font-bold tracking-tight text-slate-900">Proses Simple Additive Weighting</h2>
-            <p class="text-slate-500 mt-2">Comprehensive calculation breakdown for employee performance evaluation.</p>
+            <p class="text-slate-500 mt-2">Rincian perhitungan secara menyeluruh untuk evaluasi kinerja pegawai.</p>
         </div>
         <!-- Step Navigation -->
         <div class="grid grid-cols-4 gap-4 mb-10">
@@ -51,8 +51,8 @@
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                         <div>
-                            <h3 class="text-lg font-bold text-slate-900">Matrix Normalization (R)</h3>
-                            <p class="text-sm text-slate-500">Calculated using formula: r<sub>ij</sub> = x<sub>ij</sub> /
+                            <h3 class="text-lg font-bold text-slate-900">Matriks Normalisasi (R)</h3>
+                            <p class="text-sm text-slate-500">Perhitungan menggunakan rumus: r<sub>ij</sub> = x<sub>ij</sub> /
                                 max(x<sub>ij</sub>)</p>
                         </div>
                         <button
@@ -175,7 +175,7 @@
                         <div class="space-y-4">
                             <div>
                                 <div class="flex justify-between text-xs mb-1">
-                                    <span>C1: Performance KPI</span>
+                                    <span>C1: Kualitas Kerja</span>
                                     <span class="font-bold">40%</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-1.5">
@@ -184,7 +184,7 @@
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs mb-1">
-                                    <span>C2: Professional Attitude</span>
+                                    <span>C2: Kedisiplinan</span>
                                     <span class="font-bold">25%</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-1.5">
@@ -193,8 +193,8 @@
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs mb-1">
-                                    <span>C3: Presence &amp; Punctuality</span>
-                                    <span class="font-bold">20%</span>
+                                    <span>C3: Lama lembur</span>
+                                    <span class="font-bold">15%</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-1.5">
                                     <div class="bg-white h-1.5 rounded-full" style="width: 20%"></div>
@@ -202,8 +202,8 @@
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs mb-1">
-                                    <span>C4: Teamwork Ability</span>
-                                    <span class="font-bold">15%</span>
+                                    <span>C4: Perilaku</span>
+                                    <span class="font-bold">20%</span>
                                 </div>
                                 <div class="w-full bg-white/10 rounded-full h-1.5">
                                     <div class="bg-white h-1.5 rounded-full" style="width: 15%"></div>
