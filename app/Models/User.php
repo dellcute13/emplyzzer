@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,6 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status',
+        'last_login',
+        'last_activity',
     ];
 
     /**
@@ -45,5 +51,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isOnline()
+    {
+        return $this->last_activity && $this->last_activity >= now()->subMinutes(5);
+    }
+
+    public function lastSeen()
+    {
+        if (!$this->last_activity) return 'Belum pernah aktif';
+
+        return Carbon::parse($this->last_activity)->diffForHumans();
     }
 }

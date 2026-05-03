@@ -8,8 +8,7 @@
                 <p class="font-body-md text-body-md text-slate-500 mt-1">Kelola hak akses, peran, dan aktivitas pengguna
                     dalam sistem DSS.</p>
             </div>
-            <a
-                class="flex items-center justify-center space-x-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-slate-800 active:opacity-80 transition-all shadow-sm"
+            <a class="flex items-center justify-center space-x-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-slate-800 active:opacity-80 transition-all shadow-sm"
                 href="{{ route('users.user-add') }}">
                 <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
                 <span>Tambah Pengguna</span>
@@ -66,9 +65,44 @@
             <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <h3 class="font-headline-md text-headline-md text-slate-900">Daftar Pengguna</h3>
                 <div class="flex items-center space-x-2">
-                    <button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
-                        <span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
-                    </button>
+                    <div x-data="{ open: false, selected: 'Urutkan Data' }" class="relative">
+                        <!-- BUTTON -->
+                        <button type="button" @click="open = !open" @click.away="open = false"
+                            class="p-2 text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1">
+                            <span class="material-symbols-outlined">
+                                filter_list
+                            </span>
+                        </button>
+                        <!-- DROPDOWN -->
+                        <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-150"
+                            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                            class="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl z-50">
+                            <!-- Terbaru -->
+                            <a href="?sort=latest" @click="selected='Terbaru'; open=false"
+                                class="w-full flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition {{ $sort == 'latest' ? 'font-bold text-primary bg-slate-50' : '' }}">
+                                Terbaru
+                            </a>
+                            <!-- Terlama -->
+                            <a href="?sort=oldest" @click="selected='Terlama'; open=false"
+                                class="w-full flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition {{ $sort == 'oldest' ? 'font-bold text-primary bg-slate-50' : '' }}">
+                                Terlama
+                            </a>
+                            <!-- A-Z -->
+                            <a href="?sort=name_asc" @click="selected='Nama A-Z'; open=false"
+                                class="w-full flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition {{ $sort == 'name_asc' ? 'font-bold text-primary bg-slate-50' : '' }}">
+                                Nama A-Z
+                            </a>
+                            <!-- Z-A -->
+                            <a href="?sort=name_desc" @click="selected='Nama Z-A'; open=false"
+                                class="w-full flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition {{ $sort == 'name_desc' ? 'font-bold text-primary bg-slate-50' : '' }}">
+                                Nama Z-A
+                            </a>
+                        </div>
+                    </div>
                     <button class="p-2 text-slate-400 hover:text-slate-600 transition-colors">
                         <span class="material-symbols-outlined" data-icon="download">download</span>
                     </button>
@@ -88,217 +122,129 @@
                                 Terakhir</th>
                             <th class="px-6 py-4 font-label-sm text-label-sm text-slate-600 uppercase tracking-wider">Status
                             </th>
+                            <th class="px-6 py-4 font-label-sm text-label-sm text-slate-600 uppercase tracking-wider">
+                                Aktivitas Terakhir</th>
                             <th
                                 class="px-6 py-4 font-label-sm text-label-sm text-slate-600 uppercase tracking-wider text-right">
                                 Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <!-- User Row 1 -->
-                        <tr class="hover:bg-slate-50/80 transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center space-x-3">
+                        @forelse($users as $user)
+                            <tr class="hover:bg-slate-50/80 transition-colors group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
+                                            {{ strtoupper(substr($user->name, 0, 2)) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-Inter text-sm font-semibold text-slate-900">
+                                                {{ $user->name }}
+                                            </p>
+                                            <p class="text-[11px] text-slate-500">
+                                                ID: #{{ $user->id }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-600">
+                                    {{ $user->email }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="px-3 py-1 bg-slate-100 text-slate-800 text-[11px] font-bold rounded-full border border-slate-200">
+                                        {{ $user->role }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">
+                                    {{ $user->last_login ? \Carbon\Carbon::parse($user->last_login)->translatedFormat('d F Y, H:i') . ' WIB' : '-' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $user->status == 'Active' ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-600' }}">
+                                        {{ $user->status ?? 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">
+                                    <div class="flex items-center gap-2">
+
+                                        <!-- Dot -->
+                                        <div
+                                            class="w-2 h-2 rounded-full 
+        {{ $user->isOnline() ? 'bg-green-500' : 'bg-slate-400' }}">
+                                        </div>
+
+                                        <!-- Text -->
+                                        <span class="text-xs text-slate-500">
+
+                                            @if ($user->isOnline())
+                                                Online
+                                            @else
+                                                Terakhir aktif {{ $user->lastSeen() }}
+                                            @endif
+
+                                        </span>
+
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-right">
                                     <div
-                                        class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                        AA</div>
-                                    <div>
-                                        <p class="font-Inter text-sm font-semibold text-slate-900">Ahmad Alfian</p>
-                                        <p class="text-[11px] text-slate-500">ID: USR-001</p>
+                                        class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            class="p-2 text-slate-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all">
+                                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                                        </button>
+                                        <button
+                                            class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+                                            <span class="material-symbols-outlined text-[18px]">lock_reset</span>
+                                        </button>
+                                        <button
+                                            class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                                        </button>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-600">alfian.ahmad@dss.com
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 bg-slate-100 text-slate-800 text-[11px] font-bold rounded-full border border-slate-200">Admin</span>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">Today, 08:45 AM</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Active
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div
-                                    class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all"
-                                        title="Edit">
-                                        <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                        title="Reset Password">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="lock_reset">lock_reset</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                        title="Delete">
-                                        <span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- User Row 2 -->
-                        <tr class="hover:bg-slate-50/80 transition-colors group border-y border-slate-50">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center space-x-3">
-                                    <img class="w-9 h-9 rounded-full object-cover"
-                                        data-alt="professional portrait of a young woman with dark hair in business attire, clean office background"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTt-FHv76-2fS6Im_Yd9JyDAxaGyAgLLKe4eMuDa43LygucVSyxgP7a-i0hCSafIGdmPDm7yTeR71313jyuV_FSHolVw9ByOUjQWBQnxSl3Op8Q5XN0K66LzwMgX0tVshfVG-or-8pk2XmZkh0zRecAW09Au09q5xi9OnH8xcXawau6stcEx4SI9rrYa1hQSxQi7GikMzlT4-l1yFuh2tKdANstYtoqGDj0_SY6H9TID51l4afebLkHPj77EzeWyD7JKTNWgu2X_ln" />
-                                    <div>
-                                        <p class="font-Inter text-sm font-semibold text-slate-900">Siti Rahmawati</p>
-                                        <p class="text-[11px] text-slate-500">ID: USR-002</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-600">rahma.siti@dss.com</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 bg-secondary/10 text-secondary text-[11px] font-bold rounded-full border border-secondary/20">Manager</span>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">Yesterday, 04:12 PM
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Active
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div
-                                    class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all"
-                                        title="Edit">
-                                        <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                        title="Reset Password">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="lock_reset">lock_reset</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                        title="Delete">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="delete">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- User Row 3 -->
-                        <tr class="hover:bg-slate-50/80 transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center space-x-3">
-                                    <div
-                                        class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                        BP</div>
-                                    <div>
-                                        <p class="font-Inter text-sm font-semibold text-slate-900">Budi Pratama</p>
-                                        <p class="text-[11px] text-slate-500">ID: USR-003</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-600">budi.p@dss.com</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 bg-slate-100 text-slate-600 text-[11px] font-bold rounded-full border border-slate-200">Staff</span>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">Oct 12, 2023</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
-                                    Inactive
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div
-                                    class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all"
-                                        title="Edit">
-                                        <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                        title="Reset Password">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="lock_reset">lock_reset</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                        title="Delete">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="delete">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- User Row 4 -->
-                        <tr class="hover:bg-slate-50/80 transition-colors group">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center space-x-3">
-                                    <img class="w-9 h-9 rounded-full object-cover"
-                                        data-alt="headshot of a middle-aged male professional with glasses smiling slightly in a modern workspace"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUdi6gcQH_Enmf3BkCoBSDl2roV3gpX5OgmGhNkI-8sBKEd30RitXu-3wpJFf9_F_YBEVHqdbnscPkuqwF-RI8AI3nIu0a4TzVru2l30Ttp9NgkXEWLZbury2ikxZaqrN207HrSh0pI04FtjvuwuL6qvBqy8I1UE8EzOsDdrj4FhWGoLjZnK7jZoTCkiQmxe6TMRGNCViiW5p60RVDlnpzbFlqKSa11YUTDT7JPMvJ3HnkXgHMbCEk1DU_2VIQgWrOh06fHxyk4s4b" />
-                                    <div>
-                                        <p class="font-Inter text-sm font-semibold text-slate-900">Dr. Haryanto</p>
-                                        <p class="text-[11px] text-slate-500">ID: USR-004</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-600">haryanto.dr@dss.com
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 bg-secondary/10 text-secondary text-[11px] font-bold rounded-full border border-secondary/20">Manager</span>
-                            </td>
-                            <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">Today, 10:15 AM</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    Active
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div
-                                    class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-all"
-                                        title="Edit">
-                                        <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                                        title="Reset Password">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="lock_reset">lock_reset</span>
-                                    </button>
-                                    <button
-                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                        title="Delete">
-                                        <span class="material-symbols-outlined text-[18px]"
-                                            data-icon="delete">delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-6 text-slate-400">
+                                    Data user belum ada
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
             <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-                <p class="font-body-md text-body-md text-slate-500">Showing 4 of 42 users</p>
+                <p class="font-body-md text-body-md text-slate-500">Showing {{ $users->firstItem() }} -
+                    {{ $users->lastItem() }} of {{ $users->total() }} users</p>
                 <div class="flex space-x-2">
-                    <button
-                        class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-colors"
-                        disabled="">Previous</button>
-                    <button
-                        class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">Next</button>
+
+                    @if ($users->onFirstPage())
+                        <button disabled
+                            class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-400">
+                            Previous
+                        </button>
+                    @else
+                        <a href="{{ $users->previousPageUrl() }}"
+                            class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-600 hover:bg-slate-50">
+                            Previous
+                        </a>
+                    @endif
+
+                    @if ($users->hasMorePages())
+                        <a href="{{ $users->nextPageUrl() }}"
+                            class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-600 hover:bg-slate-50">
+                            Next
+                        </a>
+                    @else
+                        <button disabled
+                            class="px-4 py-1.5 border border-slate-200 bg-white rounded text-sm font-medium text-slate-400">
+                            Next
+                        </button>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -327,13 +273,54 @@
                                 placeholder="john.doe@company.com" type="email" />
                         </div>
                         <div class="space-y-2">
-                            <label class="font-label-sm text-label-sm text-slate-700 block">Pilih Peran (Role)</label>
-                            <select
-                                class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
-                                <option>Staff</option>
-                                <option>Manager</option>
-                                <option>Administrator</option>
-                            </select>
+                            <div x-data="{ open: false, selected: 'Pilih Peran (Role)' }" class="space-y-2 relative">
+
+                                <label class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+                                    Peran (Role)
+                                    <span class="text-error">*</span>
+                                </label>
+
+                                <input type="hidden" name="role" :value="selected">
+
+                                <button type="button" @click="open = !open" @click.away="open = false"
+                                    class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-1 focus:ring-primary-container h-11">
+
+                                    <span class="text-left"
+                                        :class="selected == 'Pilih Peran (Role)' ? 'text-slate-800' : 'text-slate-800user'"
+                                        x-text="selected">
+                                    </span>
+
+                                    <span
+                                        class="material-symbols-outlined text-slate-400 transition-transform duration-200"
+                                        :class="open ? 'rotate-180' : ''">
+                                        expand_more
+                                    </span>
+                                </button>
+
+                                <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                    x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                    class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+
+                                    <button type="button" @click="selected='Administrator'; open=false"
+                                        class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+                                        Administrator
+                                    </button>
+
+                                    <button type="button" @click="selected='Manager'; open=false"
+                                        class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+                                        Manager
+                                    </button>
+
+                                    <button type="button" @click="selected='Staff'; open=false"
+                                        class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+                                        Staff
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label class="font-label-sm text-label-sm text-slate-700 block">Status Awal</label>
@@ -415,3 +402,18 @@
         </div>
     </section>
 @endsection
+<script>
+    setInterval(() => {
+        fetch('/heartbeat', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+    }, 30000); // tiap 30 detik
+</script>
+<script>
+    setInterval(() => {
+        location.reload();
+    }, 60000); // tiap 1 menit
+</script>

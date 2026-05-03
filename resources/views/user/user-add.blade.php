@@ -18,59 +18,59 @@
                     <p class="font-body-md text-body-md text-on-surface-variant mt-1">Lengkapi data di bawah ini untuk
                         membuat kredensial pengguna baru.</p>
                 </div>
-                <form class="space-y-6">
+                <form method="POST" action="{{ route('users.users.store') }}" class="space-y-6">
+                    @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="font-label-sm text-label-sm text-on-surface-variant" for="fullname">Nama
                                 Lengkap</label>
-                            <input
+                            <input name="name"
                                 class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all"
                                 id="fullname" placeholder="Masukkan nama lengkap" type="text" />
                         </div>
                         <div class="space-y-2">
                             <label class="font-label-sm text-label-sm text-on-surface-variant" for="email">Alamat
                                 Email</label>
-                            <input
+                            <input name="email"
                                 class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-all"
                                 id="email" placeholder="contoh@domain.com" type="email" />
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div x-data="{ open: false, selected: 'Pilih Peran...' }" class="space-y-2">
+                        <div x-data="{
+                            open: false,
+                            selected: '',
+                            selectedLabel: 'Pilih Peran...'
+                        }" class="space-y-2">
                             <label class="block text-sm font-semibold text-slate-700">
                                 Peran (Role)
                             </label>
+                            <input type="hidden" name="role" :value="selected">
                             <button type="button" @click="open = !open" @click.away="open = false"
                                 class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:border-primary-container focus:ring-1 focus:ring-primary-container">
-
-                                <span class="text-left"
-                                    :class="selected == 'Pilih peran...' ? 'text-slate-400' : 'text-slate-800'"
-                                    x-text="selected">
+                                <span class="text-left" :class="selected == '' ? 'text-slate-400' : 'text-slate-800'"
+                                    x-text="selectedLabel">
                                 </span>
-
                                 <span class="material-symbols-outlined text-outline transition-transform duration-200"
                                     :class="open ? 'rotate-180' : ''">
                                     expand_more
                                 </span>
-
                             </button>
-                            <div x-show="open" x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
-                                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-150"
-                                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                            <div x-show="open" x-transition
                                 class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-md">
-                                <button type="button" @click="selected='Admin'; open=false"
+                                <button type="button" @click="selected='Administrator'; selectedLabel='Administrator'; open=false"
                                     class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 transition">
-                                    <span>Admin</span>
+
+                                    <span>Administrator</span>
                                 </button>
-                                <button type="button" @click="selected='Manager'; open=false"
+                                <button type="button" @click="selected='Manager'; selectedLabel='Manager'; open=false"
                                     class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+
                                     <span>Manager</span>
                                 </button>
-                                <button type="button" @click="selected='Staff'; open=false"
+                                <button type="button" @click="selected='Staff'; selectedLabel='Staff'; open=false"
                                     class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
+
                                     <span>Staff</span>
                                 </button>
                             </div>
@@ -108,7 +108,6 @@
                                 type="submit">Simpan Pengguna</button>
                         </div>
                     </div>
-                </form>
             </div>
             <!-- Sidebar Configuration Section -->
             <div class="col-span-12 lg:col-span-4 space-y-6">
@@ -129,6 +128,8 @@
                             </span>
                         </div>
 
+                        <input type="hidden" name="status" :value="active ? 'Active' : 'Inactive'">
+
                         {{-- Switch --}}
                         <button @click="active = !active" :class="active ? 'bg-secondary-container' : 'bg-slate-300'"
                             class="w-12 h-6 rounded-full relative p-1 transition-all duration-300">
@@ -148,6 +149,8 @@
                         </p>
                     </div>
                 </div>
+                </form>
+
                 <!-- Permissions Preview Card (Glassmorphism effect) -->
                 <div class="bg-[#131b2e] p-lg rounded-xl text-white shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-secondary/20 blur-3xl -mr-16 -mt-16"></div>

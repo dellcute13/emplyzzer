@@ -63,13 +63,13 @@
         </div>
     </nav>
     <div class="px-6 mt-auto">
-        <div class="p-4 bg-primary-fixed rounded-xl flex items-center gap-3">
+        <div class="p-4 bg-slate-200/80 rounded-xl flex items-center gap-3">
             <img alt="Admin" class="w-10 h-10 rounded-full"
                 data-alt="professional portrait of a male executive in a suit with a neutral expression and clean background"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhcONJfdm3mKvJfPFw6yKA5S8c5QMldk1Xd77GN2-qGdf71Udry4tDnsriaUpAEin2jRsDTJDp80Nly1Zi7qUtAB9Zbk8Y3ljtdYApleusj2n4ryZgs_AD6qIhJQG4e-bvY1oAxd9XduhTvqDoFlLCkGBS9UdzcecWmCVskQqZamReLvTuTqpooyKOKngamfcGi7N9b8ksv3r1eym3NdCveNA1ERySYqhOjhK4fiN461WEGrzV4irua7xVxFiaAZsEzMIrMQ-AqPk5" />
             <div class="overflow-hidden">
-                <p class="text-xs font-bold text-on-primary-fixed truncate">Administrator Profile</p>
-                <p class="text-[10px] text-on-primary-fixed-variant">System Manager</p>
+                <p class="text-xs font-bold text-on-primary-fixed truncate">{{ Auth::user()->name }}</p>
+                <p class="text-[10px] text-on-primary-fixed-variant">{{ Auth::user()->role }}</p>
             </div>
         </div>
     </div>

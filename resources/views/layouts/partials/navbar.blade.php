@@ -15,11 +15,11 @@
         <div class="flex items-center space-x-3 cursor-pointer pl-6 border-l border-slate-200">
             <div class="text-right">
                 <p class="text-xs font-bold text-slate-900 leading-none">{{ Auth::user()->name }}</p>
-                <p class="text-[10px] text-slate-500 uppercase tracking-tighter">System Manager</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-tighter">{{ Auth::user()->role }}</p>
             </div>
-            <img alt="Administrator Profile" class="w-10 h-10 rounded-full border-2 border-primary-fixed object-cover"
+            {{-- <img alt="Administrator Profile" class="w-10 h-10 rounded-full border-2 border-primary-fixed object-cover"
                 data-alt="professional headshot of a middle-aged male administrator with a confident smile in a clean office setting"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe5AgMJVFL_EO7aHnqH4qhvh4O_ZYvlMv_tpFjOtI0gBwIOh4rH2rgnK1pTsfw0qv-4GD_hsqMc6oASuEhZhYnnR_oVd1xVVsu4bjHO0B9FJYOovFBfaHpujUMQrbdiUvhgTaRf0FJQO7-aAZLgq7w2OLeCqyp7a32dtE2zooAkTbPS3fWCs0xn92jTXxabBmuzqJFNwZyS2rUN1F6ahN0mjILaAEG0PZbg1Vis5k0FQeoSqjyVyOFroqfX3PmCB1huIeWzvievTaX" />
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe5AgMJVFL_EO7aHnqH4qhvh4O_ZYvlMv_tpFjOtI0gBwIOh4rH2rgnK1pTsfw0qv-4GD_hsqMc6oASuEhZhYnnR_oVd1xVVsu4bjHO0B9FJYOovFBfaHpujUMQrbdiUvhgTaRf0FJQO7-aAZLgq7w2OLeCqyp7a32dtE2zooAkTbPS3fWCs0xn92jTXxabBmuzqJFNwZyS2rUN1F6ahN0mjILaAEG0PZbg1Vis5k0FQeoSqjyVyOFroqfX3PmCB1huIeWzvievTaX" /> --}}
         </div>
     </div>
 </header>

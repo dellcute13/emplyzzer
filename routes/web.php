@@ -11,7 +11,7 @@ use App\Http\Controllers\PhotoAiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SawProcessController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,11 +55,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::controller(LoginController::class)->group(function () {
-
-        // Logout
         Route::post('/logout', 'logout')->name('logout');
-
-        // Optional Logout Page
         Route::get('/logout/page', 'logoutPage')->name('logout.page');
     });
 });
@@ -81,6 +77,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             });
         });
     });
+
 
     Route::post('/photo-process', [EmployeePhotoController::class, 'process']);
     Route::post('/generate-photo-ai', [PhotoAiController::class, 'generate']);
@@ -138,8 +135,18 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::controller(UserController::class)->group(function () {
                 Route::get('user-data', 'userData')->name('user-data');
                 Route::get('user-add', 'userAdd')->name('user-add');
+                Route::post('/store', 'store')->name('users.store');
             });
         });
+    });
+
+    Route::post('/heartbeat', function () {
+        if (auth()->check()) {
+            auth()->user()->update([
+                'last_activity' => now()
+            ]);
+        }
+        return response()->noContent();
     });
 
 
