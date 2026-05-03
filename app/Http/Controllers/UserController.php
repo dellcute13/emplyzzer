@@ -31,7 +31,7 @@ class UserController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $users = $query->paginate(2)->withQueryString();
+        $users = $query->paginate(10)->withQueryString();
 
         return view('user.user-data', compact('users', 'sort'));
     }
