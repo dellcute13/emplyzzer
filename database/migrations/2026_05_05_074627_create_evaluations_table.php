@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('employee_id')
-                  ->constrained('employees')
-                  ->cascadeOnDelete();
+                ->constrained('employes')
+                ->cascadeOnDelete();
 
             $table->foreignId('criteria_id')
-                  ->constrained('criterias')
-                  ->cascadeOnDelete();
+                ->constrained('criterias')
+                ->cascadeOnDelete();
 
-            $table->foreign('period_id')
-                  ->constrained('periods')
-                  ->cascadeOnDelete();
+            $table->foreignId('period_id')
+                ->constrained('periods')
+                ->cascadeOnDelete();
             $table->decimal('score', 5, 2);
             $table->timestamps();
 
