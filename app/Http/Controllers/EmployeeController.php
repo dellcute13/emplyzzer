@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Modeels\Position;
+use App\Models\Department;
 
 class EmployeeController extends Controller
 {
+    public function index()
+    {
+        $employees = Employee::with(['position','department'])->get();
+
+        return view('employees.index', compact('employees'));
+    }
+
     public function employeeData()
     {
         return view('employee.employee-data');
