@@ -24,7 +24,7 @@
                     <span class="text-[11px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">+12%</span>
                 </div>
                 <p class="font-label-sm text-label-sm text-slate-500 uppercase">Total Pengguna</p>
-                <h3 class="font-display-xl text-display-xl text-slate-900">42</h3>
+                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $totalUsers }}</h3>
             </div>
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                 <div class="flex items-center justify-between mb-4">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <p class="font-label-sm text-label-sm text-slate-500 uppercase">Administrator</p>
-                <h3 class="font-display-xl text-display-xl text-slate-900">4</h3>
+                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $adminCount }}</h3>
             </div>
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                 <div class="flex items-center justify-between mb-4">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <p class="font-label-sm text-label-sm text-slate-500 uppercase">Manager / Staff</p>
-                <h3 class="font-display-xl text-display-xl text-slate-900">38</h3>
+                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $staffManagerCount }}</h3>
             </div>
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                 <div class="flex items-center justify-between mb-4">
@@ -57,7 +57,7 @@
                     </span>
                 </div>
                 <p class="font-label-sm text-label-sm text-slate-500 uppercase">Aktif Sekarang</p>
-                <h3 class="font-display-xl text-display-xl text-slate-900">8</h3>
+                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $onlineCount }}</h3>
             </div>
         </div>
         <!-- User Table Container -->
@@ -66,14 +66,12 @@
                 <h3 class="font-headline-md text-headline-md text-slate-900">Daftar Pengguna</h3>
                 <div class="flex items-center space-x-2">
                     <div x-data="{ open: false, selected: 'Urutkan Data' }" class="relative">
-                        <!-- BUTTON -->
                         <button type="button" @click="open = !open" @click.away="open = false"
                             class="p-2 text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1">
                             <span class="material-symbols-outlined">
                                 filter_list
                             </span>
                         </button>
-                        <!-- DROPDOWN -->
                         <div x-show="open" x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
@@ -168,24 +166,16 @@
                                 </td>
                                 <td class="px-6 py-4 font-data-tabular text-data-tabular text-slate-500">
                                     <div class="flex items-center gap-2">
-
-                                        <!-- Dot -->
                                         <div
-                                            class="w-2 h-2 rounded-full 
-        {{ $user->isOnline() ? 'bg-green-500' : 'bg-slate-400' }}">
+                                            class="w-2 h-2 rounded-full {{ $user->isOnline() ? 'bg-green-500' : 'bg-slate-400' }}">
                                         </div>
-
-                                        <!-- Text -->
                                         <span class="text-xs text-slate-500">
-
                                             @if ($user->isOnline())
                                                 Online
                                             @else
                                                 Terakhir aktif {{ $user->lastSeen() }}
                                             @endif
-
                                         </span>
-
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-right">

@@ -38,6 +38,33 @@
             <span class="material-symbols-outlined" data-icon="calculate">calculate</span>
             <span class="font-sans text-sm tracking-tight">Proses SAW</span>
         </a>
+        <div x-data="{ open: {{ request()->routeIs('employee.*', 'criteria.*', 'users.*') ? 'true' : 'false' }} }">
+            <button @click="open = !open"
+                class="w-full flex items-center justify-between rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200">
+
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined">home_storage</span>
+                    <span class="font-sans text-sm tracking-tight">Master Data</span>
+                </div>
+
+                <span class="material-symbols-outlined transition-transform duration-200"
+                    :class="open ? 'rotate-180' : ''">
+                    expand_more
+                </span>
+            </button>
+            <div x-show="open" x-transition class="ml-6 mt-1 space-y-1">
+                <a href="{{ route('employee.employee-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['employee.employee-data', 'employee.employee-add']) }}">
+                    <span class="material-symbols-outlined">account_tree</span>
+                    Data Posisi Pegawai
+                </a>
+                <a href="{{ route('criteria.criteria-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['criteria.criteria-data', 'criteria.criteria-add']) }}">
+                    <span class="material-symbols-outlined text-[18px]">cases</span>
+                    Data Departemen 
+                </a>
+            </div>
+        </div>
         <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200  {{ set_active('employee-rank') }}"
             href="{{ route('employee-rank') }}">
             <span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
@@ -54,7 +81,7 @@
                 <span class="material-symbols-outlined" data-icon="person_manage">person</span>
                 <span class="font-sans text-sm tracking-tight">Pengguna</span>
             </a>
-            <button @click="logoutModal = true" 
+            <button @click="logoutModal = true"
                 class="flex items-center rounded-md gap-3 px-4 py-3 text-error hover:bg-error-container/10 transition-colors duration-200">
 
                 <span class="material-symbols-outlined" data-icon="logout">logout</span>

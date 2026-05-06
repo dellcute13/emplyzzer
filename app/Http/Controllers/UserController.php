@@ -33,7 +33,13 @@ class UserController extends Controller
 
         $users = $query->paginate(10)->withQueryString();
 
-        return view('user.user-data', compact('users', 'sort'));
+        $totalUsers = User::count();
+        $adminCount = User::where('role', 'Administrator')->count();
+        $staffManagerCount = User::whereIn('role', ['Manager', 'Staff'])->count();
+
+        $onlineCount = User::where('last_activity', '>=', now()->subMinutes(2))->count();
+
+        return view('user.user-data', compact('users', 'sort', 'onlineCount', 'totalUsers', 'adminCount', 'staffManagerCount'));
     }
 
     public function userAdd()
