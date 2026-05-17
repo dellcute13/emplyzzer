@@ -29,6 +29,10 @@ class DatabaseSeeder extends Seeder
             'status' => 'Active',
             'password' => Hash::make('zacky123'),
         ]);
-
+        $this->call([
+            GradeSeeder::class,
+            DepartmentSeeder::class,
+            PositionSeeder::class,
+        ]);
     }
 }

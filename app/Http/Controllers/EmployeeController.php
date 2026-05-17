@@ -4,26 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employee;
-use App\Modeels\Position;
+use App\Models\Position;
 use App\Models\Department;
+use App\Models\Position as ModelsPosition;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::with(['position','department'])->get();
+        $employees = Employee::with(['position', 'department'])->get();
 
         return view('employees.index', compact('employees'));
     }
 
-    public function employeeData()
+    public function employeeData(Request $request)
     {
-        return view('employee.employee-data');
+        $sort = $request->get('sort', 'latest');
+
+        $query = Employee::with([
+            'position',
+            'department'
+        ]);
+
+        if ($sort == 'name_asc') {
+            $query->orderBy('name', 'asc');
+        } elseif ($sort == 'name_desc') {
+            $query->orderBy('name', 'desc');
+        } elseif ($sort == 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $employees = $query->paginate(10)->withQueryString();
+
+        return view('employee.employee-data', compact('employees', 'sort'));
     }
 
     public function employeeAdd()
     {
-        return view('employee.employee-add');
+        $positions = Position::all();
+        $departments = Department::all();
+        return view('employee.employee-add', compact('positions', 'departments'));
     }
 
     public function create()
@@ -31,34 +56,69 @@ class EmployeeController extends Controller
         return view('pegawai.create');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'photo' => 'required|image'
+    //     ]);
+
+    //     $file = $request->file('photo');
+
+    //     $tempName = time() . '_temp.' . $file->extension();
+    //     $finalName = time() . '_final.jpg';
+
+    //     $tempPath = storage_path('app/public/temp/' . $tempName);
+    //     $finalPath = storage_path('app/public/profile/' . $finalName);
+
+    //     $file->move(dirname($tempPath), basename($tempPath));
+
+    //     $python = "python3";
+    //     $script = base_path('scripts/process_photo.py');
+
+    //     exec("$python $script $tempPath $finalPath");
+
+    //     Employee::create([
+    //         'name' => $request->name,
+    //         'photo' => 'profile/' . $finalName
+    //     ]);
+
+    //     return back()->with('success', 'Pegawai berhasil ditambah');
+    // }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'photo' => 'required|image'
-        ]);
+        DB::beginTransaction();
 
-        $file = $request->file('photo');
+        try {
 
-        $tempName = time() . '_temp.' . $file->extension();
-        $finalName = time() . '_final.jpg';
+            $validated = $request->validate([
+                'nip'           => 'required|unique:employees,nip',
+                'name'          => 'required|max:100',
+                'gender'        => 'required|in:P,L',
+                'photo_ai'      => 'nullable|string',
+                'position_id'   => 'required|exists:positions,id',
+                'department_id' => 'required|exists:departments,id',
+                'join_date'     => 'nullable|date',
+                'status'        => 'required|in:permanent,contract',
+            ]);
 
-        $tempPath = storage_path('app/public/temp/' . $tempName);
-        $finalPath = storage_path('app/public/profile/' . $finalName);
+            $validated['photo'] = $request->photo_ai;
 
-        $file->move(dirname($tempPath), basename($tempPath));
+            Employee::create($validated);
+            DB::commit();
+            return redirect()->route('employee.employee-data')->with('success', 'Data pegawai berhasil disimpan');
+        } catch (\Exception $e) {
 
-        $python = "python3";
-        $script = base_path('scripts/process_photo.py');
-
-        exec("$python $script $tempPath $finalPath");
-
-        Employee::create([
-            'name' => $request->name,
-            'photo' => 'profile/' . $finalName
-        ]);
-
-        return back()->with('success', 'Pegawai berhasil ditambah');
+            DB::rollBack();
+            if (
+                $request->photo_ai &&
+                Storage::disk('public')->exists($request->photo_ai)
+            ) {
+                Storage::disk('public')->delete($request->photo_ai);
+            }
+            return back()->withInput()->with('error', 'Tambah pegawai gagal: ' . $e->getMessage());
+        }
     }
 
     public function generateAI(Request $request)

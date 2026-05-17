@@ -74,6 +74,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::controller(EmployeeController::class)->group(function () {
                 Route::get('employee-data', 'employeeData')->name('employee-data');
                 Route::get('employee-add', 'employeeAdd')->name('employee-add');
+                Route::post('employee-store', 'store')->name('employee-store');
             });
         });
     });
