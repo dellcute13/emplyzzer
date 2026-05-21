@@ -38,7 +38,7 @@
             <span class="material-symbols-outlined" data-icon="calculate">calculate</span>
             <span class="font-sans text-sm tracking-tight">Proses SAW</span>
         </a>
-        <div x-data="{ open: {{ request()->routeIs('employee.*', 'criteria.*', 'users.*') ? 'true' : 'false' }} }">
+        <div x-data="{ open: {{ request()->routeIs('master-data.*') ? 'true' : 'false' }} }">
             <button @click="open = !open"
                 class="w-full flex items-center justify-between rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200">
 
@@ -53,15 +53,20 @@
                 </span>
             </button>
             <div x-show="open" x-transition class="ml-6 mt-1 space-y-1">
-                <a href="{{ route('employee.employee-data') }}"
-                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['employee.employee-data', 'employee.employee-add']) }}">
-                    <span class="material-symbols-outlined">account_tree</span>
+                <a href="{{ route('master-data.position-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['master-data.position-data', 'master-data.position-add']) }}">
+                    <span class="material-symbols-outlined text-[18px]">account_tree</span>
                     Data Posisi Pegawai
                 </a>
-                <a href="{{ route('criteria.criteria-data') }}"
-                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['criteria.criteria-data', 'criteria.criteria-add']) }}">
+                <a href="{{ route('master-data.department-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['master-data.department-data', 'master-data.department-add']) }}">
                     <span class="material-symbols-outlined text-[18px]">cases</span>
-                    Data Departemen 
+                    Data Departemen
+                </a>
+                <a href="{{ route('master-data.grade-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['master-data.grade-data', 'master-data.grade-add']) }}">
+                    <span class="material-symbols-outlined text-[18px]">grading</span>
+                    Data Grade
                 </a>
             </div>
         </div>

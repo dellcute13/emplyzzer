@@ -130,8 +130,15 @@
                                     {{ $loop->iteration }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <img src="{{ $employee->photo ? asset('storage/' . $employee->photo) : asset('assets/images/default-user.png') }}"
-                                        alt="{{ $employee->name }}" class="w-20 h-20 rounded-full object-cover">
+                                    @if ($employee->photo)
+                                        <img src="{{ asset('storage/' . $employee->photo) }}" alt="{{ $employee->name }}"
+                                            class="w-20 h-20 rounded-full object-cover">
+                                    @else
+                                        <div
+                                            class="w-20 h-20 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xl">
+                                            {{ strtoupper(substr($employee->name, 0, 2)) }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 font-data-tabular text-slate-600">
                                     {{ $employee->nip }}

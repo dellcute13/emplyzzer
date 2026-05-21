@@ -7,6 +7,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeGradeController;
 use App\Http\Controllers\EmployeePhotoController;
 use App\Http\Controllers\EmployeeRankController;
+use App\Http\Controllers\MasterData\DepartmentController;
+use App\Http\Controllers\MasterData\GradeController;
+use App\Http\Controllers\MasterData\PositionController;
 use App\Http\Controllers\PhotoAiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SawProcessController;
@@ -75,6 +78,26 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::get('employee-data', 'employeeData')->name('employee-data');
                 Route::get('employee-add', 'employeeAdd')->name('employee-add');
                 Route::post('employee-store', 'store')->name('employee-store');
+            });
+        });
+    });
+    
+    Route::middleware('auth')->group(function () {
+        Route::prefix('master-data')->name('master-data.')->group(function () {
+            Route::controller(PositionController::class)->group(function () {
+                Route::get('position-data', 'positionData')->name('position-data');
+                Route::get('position-add', 'positionAdd')->name('position-add');
+                Route::post('position-store', 'positionStore')->name('position-store');
+            });
+            Route::controller(GradeController::class)->group(function () {
+                Route::get('grade-data', 'gradeData')->name('grade-data');
+                Route::get('grade-add', 'gradeAdd')->name('grade-add');
+                Route::post('grade-store', 'gradeStore')->name('grade-store');
+            });
+            Route::controller(DepartmentController::class)->group(function () {
+                Route::get('department-data', 'departmentData')->name('department-data');
+                Route::get('department-add', 'departmentAdd')->name('department-add');
+                Route::post('department-store', 'departmentStore')->name('department-store');
             });
         });
     });
