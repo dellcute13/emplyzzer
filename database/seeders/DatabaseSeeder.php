@@ -27,8 +27,19 @@ class DatabaseSeeder extends Seeder
             'email' => 'user.zacky@gmail.com',
             'role' => 'Administrator',
             'status' => 'Active',
-            'password' => Hash::make('zacky123'),
+            'password' => Hash::make('zacky123'),                                           
+
         ]);
+
+        User::factory()->create([
+            'name' => 'Della Sheesh',
+            'email' => 'user.della@gmail.com',
+            'role' => 'Manager',
+            'status' => 'Active',
+            'password' => Hash::make('della123'),
+        ]);
+        
+
         $this->call([
             GradeSeeder::class,
             DepartmentSeeder::class,
