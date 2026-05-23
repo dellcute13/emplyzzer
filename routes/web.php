@@ -78,6 +78,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::get('employee-data', 'employeeData')->name('employee-data');
                 Route::get('employee-add', 'employeeAdd')->name('employee-add');
                 Route::post('employee-store', 'store')->name('employee-store');
+                Route::get('employee-edit/{id}', 'employeeEdit')->name('employee-edit');
+                Route::post('employee-store-update/{id}', 'employeeStoreUpdate')->name('employee-store-update');
+                Route::delete('employee-delete/{id}', 'employeeDelete')->name('employee-delete');
             });
         });
     });

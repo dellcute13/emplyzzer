@@ -10,6 +10,7 @@ use App\Models\Position as ModelsPosition;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -54,6 +55,54 @@ class EmployeeController extends Controller
     public function create()
     {
         return view('pegawai.create');
+    }
+
+    public function employeeEdit($id)
+    {
+        $employee = Employee::findOrFail($id);
+        $positions = ModelsPosition::all();
+        $departments = Department::all();
+        return view('employee.employee-edit', compact('employee', 'positions', 'departments'));
+    }
+
+    public function employeeStoreUpdate(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $employee = Employee::findOrFail($id);
+
+            $validated = $request->validate([
+                'nip' => [
+                    'required',
+                    Rule::unique('employees')->ignore($employee->id),
+                ],
+                'name'          => 'required|max:100',
+                'gender'        => 'required|in:P,L',
+                'photo_ai'      => 'nullable|string',
+                'position_id'   => 'required|exists:positions,id',
+                'department_id' => 'required|exists:departments,id',
+                'join_date'     => 'nullable|date',
+                'status'        => 'required|in:permanent,contract',
+            ]);
+
+            $validated['photo'] = $request->photo_ai;
+
+            $employee->update($validated);
+            DB::commit();
+            return redirect()->route('employee.employee-data')->with('success', 'Data pegawai berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            if (
+                $request->photo_ai &&
+                Storage::disk('public')->exists($request->photo_ai)
+            ) {
+                Storage::disk('public')->delete($request->photo_ai);
+            }
+            return back()->withInput()->with('error', 'Update pegawai gagal: ' . $e->getMessage());
+        }
     }
 
     // public function store(Request $request)

@@ -176,8 +176,8 @@
                                                 visibility
                                             </span>
                                         </button>
-                                        <a href="#" class="p-2 text-slate-400 hover:text-primary transition-colors"
-                                            title="Edit">
+                                        <a href="{{ route('employee.employee-edit', $employee->id) }}"
+                                            class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
                                             <span class="material-symbols-outlined text-sm">
                                                 edit
                                             </span>
