@@ -84,7 +84,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             });
         });
     });
-    
+
     Route::middleware('auth')->group(function () {
         Route::prefix('master-data')->name('master-data.')->group(function () {
             Route::controller(PositionController::class)->group(function () {

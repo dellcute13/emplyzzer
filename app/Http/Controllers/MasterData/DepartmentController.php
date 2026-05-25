@@ -40,7 +40,7 @@ class DepartmentController extends Controller
     {
         return view('master-data.department.department-add');
     }
-    
+
     /**
      * Store new department
      */
@@ -61,7 +61,6 @@ class DepartmentController extends Controller
             return redirect()
                 ->route('master-data.department-data')
                 ->with('success', 'Department created successfully');
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -72,7 +71,7 @@ class DepartmentController extends Controller
         }
     }
 
-        /**
+    /**
      * Show the form for editing the specified resource.
      */
     public function departmentEdit($id)
@@ -104,7 +103,6 @@ class DepartmentController extends Controller
             return redirect()
                 ->route('master-data.department-data')
                 ->with('success', 'Department updated successfully');
-
         } catch (\Exception $e) {
 
             DB::rollBack();

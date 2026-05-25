@@ -66,7 +66,7 @@ class GradeController extends Controller
     }
 
 
-        /**
+    /**
      * Show the form for editing the specified resource.
      */
     public function gradeEdit($id)
@@ -99,7 +99,6 @@ class GradeController extends Controller
             return redirect()
                 ->route('master-data.grade-data')
                 ->with('success', 'Grade updated successfully');
-
         } catch (\Exception $e) {
 
             DB::rollBack();

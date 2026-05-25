@@ -34,7 +34,7 @@ class PositionController extends Controller
         return view('master-data.position.position-data', compact('positions'));
     }
 
-        /**
+    /**
      * Show the form for editing the specified resource.
      */
     public function positionEdit($id)
@@ -71,7 +71,6 @@ class PositionController extends Controller
             return redirect()
                 ->route('master-data.position-data')
                 ->with('success', 'Position updated successfully');
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -103,7 +102,6 @@ class PositionController extends Controller
             return redirect()
                 ->route('master-data.position-data')
                 ->with('success', 'Position created successfully');
-
         } catch (\Exception $e) {
 
             DB::rollBack();
