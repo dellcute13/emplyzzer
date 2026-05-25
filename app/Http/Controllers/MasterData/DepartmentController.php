@@ -33,6 +33,45 @@ class DepartmentController extends Controller
         return view('master-data.department.department-data', compact('departments'));
     }
 
+    /**
+     * Show add department form
+     */
+    public function departmentAdd()
+    {
+        return view('master-data.department.department-add');
+    }
+    
+    /**
+     * Store new department
+     */
+    public function departmentStore(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+            ]);
+
+            Department::create($validated);
+
+            DB::commit();
+
+            return redirect()
+                ->route('master-data.department-data')
+                ->with('success', 'Department created successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->with('error', 'Create department failed: ' . $e->getMessage());
+        }
+    }
+
         /**
      * Show the form for editing the specified resource.
      */

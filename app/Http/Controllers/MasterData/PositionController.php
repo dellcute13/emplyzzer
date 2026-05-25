@@ -83,6 +83,48 @@ class PositionController extends Controller
     }
 
     /**
+     * Store new position
+     */
+    public function positionStore(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'grade_id' => 'required|exists:grades,id',
+            ]);
+
+            Position::create($validated);
+
+            DB::commit();
+
+            return redirect()
+                ->route('master-data.position-data')
+                ->with('success', 'Position created successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->with('error', 'Create position failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show add position form
+     */
+    public function positionAdd()
+    {
+        $grades = Grade::all();
+
+        return view('master-data.position.position-add', compact('grades'));
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function positionDelete($id)
