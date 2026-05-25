@@ -91,16 +91,25 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::get('position-data', 'positionData')->name('position-data');
                 Route::get('position-add', 'positionAdd')->name('position-add');
                 Route::post('position-store', 'positionStore')->name('position-store');
+                Route::get('position-edit/{id}', 'positionEdit')->name('position-edit');
+                Route::post('position-update/{id}', 'positionUpdate')->name('position-update');
+                Route::delete('position-delete/{id}', 'positionDelete')->name('position-delete');
             });
             Route::controller(GradeController::class)->group(function () {
                 Route::get('grade-data', 'gradeData')->name('grade-data');
                 Route::get('grade-add', 'gradeAdd')->name('grade-add');
                 Route::post('grade-store', 'gradeStore')->name('grade-store');
+                Route::get('grade-edit/{id}', 'gradeEdit')->name('grade-edit');
+                Route::post('grade-update/{id}', 'gradeUpdate')->name('grade-update');
+                Route::delete('grade-delete/{id}', 'gradeDelete')->name('grade-delete');
             });
             Route::controller(DepartmentController::class)->group(function () {
                 Route::get('department-data', 'departmentData')->name('department-data');
                 Route::get('department-add', 'departmentAdd')->name('department-add');
                 Route::post('department-store', 'departmentStore')->name('department-store');
+                Route::get('department-edit/{id}', 'departmentEdit')->name('department-edit');
+                Route::post('department-update/{id}', 'departmentUpdate')->name('department-update');
+                Route::delete('department-delete/{id}', 'departmentDelete')->name('department-delete');
             });
         });
     });

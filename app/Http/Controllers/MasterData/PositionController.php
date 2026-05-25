@@ -34,20 +34,24 @@ class PositionController extends Controller
         return view('master-data.position.position-data', compact('positions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
+        /**
+     * Show the form for editing the specified resource.
      */
-    public function positionAdd()
+    public function positionEdit($id)
     {
+        $position = Position::findOrFail($id);
         $grades = Grade::all();
 
-        return view('master-data.position.position-add', compact('grades'));
+        return view('master-data.position.position-edit', compact(
+            'position',
+            'grades'
+        ));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      */
-    public function positionStore(Request $request)
+    public function positionUpdate(Request $request, $id)
     {
         DB::beginTransaction();
 
@@ -58,53 +62,37 @@ class PositionController extends Controller
                 'grade_id' => 'required|exists:grades,id',
             ]);
 
-            Position::create($validated);
+            $position = Position::findOrFail($id);
+
+            $position->update($validated);
+
             DB::commit();
-            return redirect()->route('master-data.position-data')->with('success', 'Data posisi berhasil disimpan');
+
+            return redirect()
+                ->route('master-data.position-data')
+                ->with('success', 'Position updated successfully');
+
         } catch (\Exception $e) {
 
             DB::rollBack();
-            return back()->withInput()->with('error', 'Tambah posisi gagal: ' . $e->getMessage());
+
+            return back()
+                ->withInput()
+                ->with('error', 'Update position failed: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Position $position)
-    {
-        $grades = Grade::all();
-
-        return view('positions.edit', compact('position', 'grades'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Position $position)
-    {
-        $position->update($request->all());
-
-        return redirect()->route('positions.index')
-            ->with('success', 'Position updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Position $position)
+    public function positionDelete($id)
     {
+        $position = Position::findOrFail($id);
+
         $position->delete();
 
-        return redirect()->route('positions.index')
-            ->with('success', 'Position deleted successfully.');
+        return redirect()
+            ->route('master-data.position-data')
+            ->with('success', 'Position deleted successfully');
     }
 }

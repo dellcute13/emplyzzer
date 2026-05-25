@@ -33,18 +33,20 @@ class DepartmentController extends Controller
         return view('master-data.department.department-data', compact('departments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
+        /**
+     * Show the form for editing the specified resource.
      */
-    public function departmentAdd()
+    public function departmentEdit($id)
     {
-        return view('master-data.department.department-add');
+        $department = Department::findOrFail($id);
+
+        return view('master-data.department.department-edit', compact('department'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      */
-    public function departmentStore(Request $request)
+    public function departmentUpdate(Request $request, $id)
     {
         DB::beginTransaction();
 
@@ -54,50 +56,37 @@ class DepartmentController extends Controller
                 'name' => 'required|string|max:255',
             ]);
 
-            Department::create($validated);
+            $department = Department::findOrFail($id);
+
+            $department->update($validated);
+
             DB::commit();
-            return redirect()->route('master-data.department-data')->with('success', 'Data department berhasil disimpan');
+
+            return redirect()
+                ->route('master-data.department-data')
+                ->with('success', 'Department updated successfully');
+
         } catch (\Exception $e) {
 
             DB::rollBack();
-            return back()->withInput()->with('error', 'Tambah department gagal: ' . $e->getMessage());
+
+            return back()
+                ->withInput()
+                ->with('error', 'Update department failed: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Department $department)
-    {
-        $department->update($request->all());
-
-        return back()->with('success', 'Department updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $department)
+    public function departmentDelete($id)
     {
+        $department = Department::findOrFail($id);
+
         $department->delete();
 
-        return redirect()->route('departments.index')
-            ->with('success', 'Department deleted successfully.');
+        return redirect()
+            ->route('master-data.department-data')
+            ->with('success', 'Department deleted successfully');
     }
 }
