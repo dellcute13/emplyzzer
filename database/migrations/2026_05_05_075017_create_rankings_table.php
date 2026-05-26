@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->decimal('preference_value', 10, 6);
             $table->integer('rank');
-            $table->enum('status', ['excellent','good','poor']);
+            $table->string('grade')->nullable();
 
             $table->timestamps();
         });

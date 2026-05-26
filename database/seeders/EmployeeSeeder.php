@@ -81,7 +81,7 @@ class EmployeeSeeder extends Seeder
 
                 'gender' => 'L',
 
-                'photo' => 'profile/default-male.jpg',
+                'photo' => 'assets/images/default-user.png',
 
                 'position_id' => rand(1, 5),
 
@@ -110,7 +110,7 @@ class EmployeeSeeder extends Seeder
 
                 'gender' => 'P',
 
-                'photo' => 'profile/default-female.jpg',
+                'photo' => 'assets/images/default-user.png',
 
                 'position_id' => rand(1, 5),
 

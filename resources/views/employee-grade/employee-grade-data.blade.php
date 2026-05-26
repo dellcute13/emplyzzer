@@ -27,6 +27,7 @@
                             'position' => $employee->position->name ?? '-',
                             'department' => $employee->department->name ?? '-',
                             'status' => $employee->status,
+                            'tenure' => \Carbon\Carbon::parse($employee->join_date)->diff(now())->y . ' Tahun ' . \Carbon\Carbon::parse($employee->join_date)->diff(now())->m . ' Bulan ' . \Carbon\Carbon::parse($employee->join_date)->diff(now())->d . ' Hari',
                             'photo' => $employee->photo
                                 ? asset('storage/' . $employee->photo)
                                 : asset('assets/images/default-user.png'),
@@ -283,20 +284,6 @@
                                 kinerja.</p>
                         </div>
                     </div>
-                </div>
-                <!-- Guidance Mini Card -->
-                <div class="bg-surface-container-highest/30 border border-dashed border-outline-variant rounded-xl p-md">
-                    <h5 class="text-xs font-black text-on-surface-variant uppercase mb-2">Bantuan Cepat</h5>
-                    <ul class="space-y-2">
-                        <li class="flex items-center gap-2 text-[11px] text-on-surface">
-                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                            Klik "Simpan" untuk mengunci nilai permanen
-                        </li>
-                        <li class="flex items-center gap-2 text-[11px] text-on-surface">
-                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                            Skala penilaian berkisar antara 1 s/d 100
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
