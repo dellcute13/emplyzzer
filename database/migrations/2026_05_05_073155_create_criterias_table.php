@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name', 150);
             $table->decimal('weight', 5, 2);
             $table->enum('attribute', ['benefit', 'cost']);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -8,7 +8,43 @@
                 kriteria
                 yang telah ditentukan untuk mendukung akurasi perhitungan metode Simple Additive Weighting (SAW).</p>
         </div>
-        <div class="grid grid-cols-12 gap-8 items-start">
+        <div class="grid grid-cols-12 gap-8 items-start"
+            x-data="{
+                open: false,
+                selected: 'Pilih salah satu pegawai...',
+                selectedId: '',
+                search: '',
+
+                selectedEmployee: null,
+            
+                employees: @js(
+                    $employees->map(function ($employee) {
+                        return [
+                            'id' => $employee->id,
+                            'label' => $employee->name . ' (NIP: ' . $employee->nip . ')',
+                            'name' => $employee->name,
+                            'nip' => $employee->nip,
+                            'position' => $employee->position->name ?? '-',
+                            'department' => $employee->department->name ?? '-',
+                            'status' => $employee->status,
+                            'tenure' => \Carbon\Carbon::parse($employee->join_date)->diff(now())->y . ' Tahun ' . \Carbon\Carbon::parse($employee->join_date)->diff(now())->m . ' Bulan ' . \Carbon\Carbon::parse($employee->join_date)->diff(now())->d . ' Hari',
+                            'photo' => $employee->photo
+                                ? asset('storage/' . $employee->photo)
+                                : asset('assets/images/default-user.png'),
+                            'join_date' => \Carbon\Carbon::parse($employee->join_date)->diffForHumans(),
+                            'score' => '82.45 (B+)'
+                        ];
+                    }),
+                ),
+            
+                get filteredEmployees() {
+            
+                    return this.employees.filter(item =>
+                        item.label.toLowerCase().includes(this.search.toLowerCase())
+                    )
+                }
+            
+            }">
             <!-- Left Column: Form & Selection -->
             <div class="col-span-12 lg:col-span-8 space-y-6">
                 <!-- Selection Card -->
@@ -24,33 +60,14 @@
                             <span class="text-secondary font-bold text-sm">Periode: Q4 2023</span>
                         </div>
                     </div>
-                    <div class="relative">
+                    <div x-cloak class="relative">
                         <div class="space-y-xs">
-                            <div x-data="{
-                                open: false,
-                                selected: 'Pilih salah satu pegawai...',
-                                search: '',
-                                employees: [
-                                    'Budi Setiawan (NIP: 198203102005011001)',
-                                    'Siti Aminah (NIP: 198505222010122003)',
-                                    'Andi Wijaya (NIP: 199008152015031005)',
-                                    'Rina Marlina (NIP: 199312302018012002)'
-                                ],
-                            
-                                get filteredEmployees() {
-                                    return this.employees.filter(item =>
-                                        item.toLowerCase().includes(this.search.toLowerCase())
-                                    )
-                                }
-                            }" class="space-y-2 relative">
+                            <div class="space-y-2 relative">
                                 <label class="block text-label-sm font-bold text-on-surface-variant uppercase mb-2">
                                     Nama Lengkap atau NIP
                                 </label>
-                                <input type="hidden" name="employee" :value="selected">
-                                <button type="button" @click="open = !open; if(open) $nextTick(() => $refs.search.focus())"
-                                    @click.away="open = false"
-                                    class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:ring-2 focus:ring-primary-container">
-
+                                <input type="hidden" name="employee_id" :value="selectedId">
+                                <button type="button" @click="open = !open; if(open) $nextTick(() => $refs.search.focus())" @click.away="open = false" class="w-full bg-white border border-outline-variant rounded-lg px-3.5 py-2.5 text-body-md outline-none transition-all flex items-center justify-between hover:border-primary-container focus:ring-2 focus:ring-primary-container">
                                     <span class="text-left truncate"
                                         :class="selected == 'Pilih salah satu pegawai...' ? 'text-slate-400' : 'text-slate-800'"
                                         x-text="selected">
@@ -67,7 +84,6 @@
                                             <input type="text" x-ref="search" x-model="search"
                                                 placeholder="Cari nama pegawai / NIP..."
                                                 class="w-full rounded-lg border border-slate-200 pl-10 pr-3 py-2 text-sm focus:ring-2 focus:ring-primary-container focus:border-primary-container outline-none">
-
                                             <span
                                                 class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-[20px]">
                                                 search
@@ -75,14 +91,12 @@
                                         </div>
                                     </div>
                                     <div class="max-h-64 overflow-y-auto">
-                                        <template x-for="item in filteredEmployees" :key="item">
-                                            <button type="button" @click="selected = item; open = false; search=''"
-                                                class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-b border-slate-100 transition">
-                                                <span x-text="item"></span>
+                                        <template x-for="item in filteredEmployees" :key="item.id">
+                                            <button type="button" @click=" selected = item.label; selectedId = item.id; selectedEmployee = item; open = false; search = '';" class="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-b border-slate-100 transition">
+                                                <span x-text="item.label"></span>
                                             </button>
                                         </template>
-                                        <div x-show="filteredEmployees.length === 0"
-                                            class="px-4 py-5 text-sm text-center text-slate-400">
+                                        <div x-show="filteredEmployees.length === 0" class="px-4 py-5 text-sm text-center text-slate-400">
                                             Pegawai tidak ditemukan
                                         </div>
                                     </div>
@@ -226,7 +240,7 @@
                 </div>
             </div>
             <!-- Right Column: Summary Card -->
-            <div class="col-span-12 lg:col-span-4 space-y-6">
+            <div x-show="selectedEmployee" x-cloak class="col-span-12 lg:col-span-4 space-y-6">
                 <div class="bg-white border border-outline-variant rounded-xl p-lg custom-shadow sticky top-24">
                     <h3 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
                         <span class="material-symbols-outlined text-secondary">account_circle</span>
@@ -234,33 +248,31 @@
                     </h3>
                     <div class="flex flex-col items-center text-center pb-6 border-b border-surface-variant">
                         <div class="relative mb-4">
-                            <img alt="Budi Setiawan" class="w-32 h-32 rounded-full object-cover ring-4 ring-secondary/10"
-                                data-alt="professional portrait of a middle-aged male employee with glasses smiling warmly against a neutral grey studio background"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy2KGSeNIk4EsIbXXzGTVhxqvuYjRFk3vboy6h0v-dTa1o5E-EBhpixbYr3cHo0qLV7O7VqmOjzFJCgs5B-wWOqodKJoA7RlA-7EFTBCkflGmktG3muzZ9VM5vIAe047iN2C96KMGrTxDzrRbTmgLmRZkXJWHYOEZU9HzVrON0CRc7woJJYDb6LFTN2_saML6MvlfJGaUCAQNTblV5A-x8oiwZeNquU7OfqBXWrkyStk71RDlMygtry_niAenGBKc1xIvO55h27iF1" />
+                            <img :src="selectedEmployee?.photo" class="w-32 h-32 rounded-full object-cover ring-4 ring-secondary/10" />
                             <div class="absolute bottom-1 right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full">
                             </div>
                         </div>
-                        <h4 class="font-headline-lg text-lg text-primary">Budi Setiawan, M.Kom</h4>
-                        <p class="text-secondary font-bold text-sm tracking-tight mb-1">Senior Data Analyst</p>
-                        <p class="text-on-surface-variant text-xs">Divisi Teknologi Informasi</p>
+                        <h4 class="font-headline-lg text-lg text-primary" x-text="selectedEmployee?.name || 'Nama Karyawan'"></h4>
+                        <p class="text-secondary font-bold text-sm tracking-tight mb-1" x-text="selectedEmployee?.position || 'Jabatan'"></p>
+                        <p class="text-on-surface-variant text-xs" x-text="selectedEmployee?.department || 'Divisi'""></p>
                     </div>
                     <div class="py-6 space-y-4">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">NIP</span>
-                            <span class="font-data-tabular text-primary">198203102005011001</span>
+                            <span class="font-data-tabular text-primary" x-text="selectedEmployee?.nip || 'NIP tidak tersedia'"></span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">Status Pegawai</span>
                             <span
-                                class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-black rounded uppercase">Tetap</span>
+                                class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-black rounded uppercase" x-text="selectedEmployee?.status || 'Status tidak tersedia'"></span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">Lama Bekerja</span>
-                            <span class="font-data-tabular text-primary">18 Tahun</span>
+                            <span class="font-data-tabular text-primary" x-text="selectedEmployee?.tenure || 'Lama bekerja tidak tersedia'">18 Tahun</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">Penilaian Terakhir</span>
-                            <span class="font-data-tabular text-primary">82.45 (B+)</span>
+                            <span class="font-data-tabular text-primary" x-text="selectedEmployee?.lastEvaluation || 'Penilaian terakhir tidak tersedia'">82.45 (B+)</span>
                         </div>
                     </div>
                     <div class="pt-6 border-t border-surface-variant">
@@ -272,20 +284,6 @@
                                 kinerja.</p>
                         </div>
                     </div>
-                </div>
-                <!-- Guidance Mini Card -->
-                <div class="bg-surface-container-highest/30 border border-dashed border-outline-variant rounded-xl p-md">
-                    <h5 class="text-xs font-black text-on-surface-variant uppercase mb-2">Bantuan Cepat</h5>
-                    <ul class="space-y-2">
-                        <li class="flex items-center gap-2 text-[11px] text-on-surface">
-                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                            Klik "Simpan" untuk mengunci nilai permanen
-                        </li>
-                        <li class="flex items-center gap-2 text-[11px] text-on-surface">
-                            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-                            Skala penilaian berkisar antara 1 s/d 100
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>

@@ -26,6 +26,12 @@ return new class extends Migration
                 ->constrained('periods')
                 ->cascadeOnDelete();
             $table->decimal('score', 5, 2);
+            
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
             $table->timestamps();
 
             //optional tidak doubel input
