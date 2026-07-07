@@ -48,182 +48,101 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-outline-variant">
+                                @forelse ($criterias as $criteria)
                                 <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-lg py-5 font-data-tabular">C1</td>
-                                    <td class="px-lg py-5 font-medium text-slate-900">Kualitas Kerja</td>
+                                    <td class="px-lg py-5 font-data-tabular">{{ $criteria->code }}</td>
+                                    <td class="px-lg py-5 font-medium text-slate-900">
+                                        <div>{{ $criteria->name }}</div>
+                                        @if($criteria->description)
+                                            <div class="text-xs text-slate-400 mt-0.5 max-w-xs truncate">{{ $criteria->description }}</div>
+                                        @endif
+                                    </td>
                                     <td class="px-lg py-5">
                                         <div class="flex items-center gap-2">
                                             <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                                <div class="bg-secondary h-full" style="width: 30%"></div>
+                                                <div class="bg-secondary h-full" style="width: {{ $criteria->weight * 100 }}%"></div>
                                             </div>
-                                            <span class="font-data-tabular">30%</span>
+                                            <span class="font-data-tabular">{{ number_format($criteria->weight * 100, 0) }}%</span>
                                         </div>
                                     </td>
                                     <td class="px-lg py-5">
-                                        <span
-                                            class="bg-[#e7f5ed] text-[#1a7a44] px-3 py-1 rounded-full text-xs font-bold uppercase">Benefit</span>
+                                        @if($criteria->attribute === 'benefit')
+                                            <span class="bg-[#e7f5ed] text-[#1a7a44] px-3 py-1 rounded-full text-xs font-bold uppercase">Benefit</span>
+                                        @else
+                                            <span class="bg-[#fef2f2] text-[#b91c1c] px-3 py-1 rounded-full text-xs font-bold uppercase">Cost</span>
+                                        @endif
                                     </td>
                                     <td class="px-lg py-5 text-right">
                                         <div class="flex justify-end gap-2">
-                                            <button
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="edit">edit</span></button>
-                                            <button
-                                                class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="delete">delete</span></button>
+                                            <a href="{{ route('criteria.criteria-edit', $criteria->id) }}"
+                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
+                                                <span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+                                            </a>
+                                            <form action="{{ route('criteria.criteria-delete', $criteria->id) }}"
+                                                method="POST" class="inline"
+                                                onsubmit="return confirm('Hapus kriteria {{ $criteria->name }}?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
+                                                    <span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-lg py-5 font-data-tabular">C2</td>
-                                    <td class="px-lg py-5 font-medium text-slate-900">Kedisiplinan</td>
-                                    <td class="px-lg py-5">
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                                <div class="bg-secondary h-full" style="width: 25%"></div>
-                                            </div>
-                                            <span class="font-data-tabular">25%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-lg py-5">
-                                        <span
-                                            class="bg-[#e7f5ed] text-[#1a7a44] px-3 py-1 rounded-full text-xs font-bold uppercase">Benefit</span>
-                                    </td>
-                                    <td class="px-lg py-5 text-right">
-                                        <div class="flex justify-end gap-2">
-                                            <button
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="edit">edit</span></button>
-                                            <button
-                                                class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="delete">delete</span></button>
-                                        </div>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="px-lg py-10 text-center text-slate-400">
+                                        Belum ada data kriteria
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-lg py-5 font-data-tabular">C3</td>
-                                    <td class="px-lg py-5 font-medium text-slate-900">Lama Lembur</td>
-                                    <td class="px-lg py-5">
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                                <div class="bg-secondary h-full" style="width: 15%"></div>
-                                            </div>
-                                            <span class="font-data-tabular">15%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-lg py-5">
-                                        <span
-                                            class="bg-[#fef2f2] text-[#b91c1c] px-3 py-1 rounded-full text-xs font-bold uppercase">Cost</span>
-                                    </td>
-                                    <td class="px-lg py-5 text-right">
-                                        <div class="flex justify-end gap-2">
-                                            <button
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="edit">edit</span></button>
-                                            <button
-                                                class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="delete">delete</span></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-lg py-5 font-data-tabular">C4</td>
-                                    <td class="px-lg py-5 font-medium text-slate-900">Perilaku</td>
-                                    <td class="px-lg py-5">
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                                                <div class="bg-secondary h-full" style="width: 30%"></div>
-                                            </div>
-                                            <span class="font-data-tabular">30%</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-lg py-5">
-                                        <span
-                                            class="bg-[#e7f5ed] text-[#1a7a44] px-3 py-1 rounded-full text-xs font-bold uppercase">Benefit</span>
-                                    </td>
-                                    <td class="px-lg py-5 text-right">
-                                        <div class="flex justify-end gap-2">
-                                            <button
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="edit">edit</span></button>
-                                            <button
-                                                class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors"><span
-                                                    class="material-symbols-outlined text-[20px]"
-                                                    data-icon="delete">delete</span></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <!-- Form Section (Col 9-12) -->
+            <!-- Insight Stats Section -->
             <div class="col-span-12 lg:col-span-4">
-                <div
-                    class="bg-white rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] sticky top-24">
+                <div class="bg-white rounded-xl border border-outline-variant shadow-[0px_4px_20px_rgba(0,0,0,0.05)] sticky top-24">
                     <div class="px-lg py-md border-b border-outline-variant bg-surface-container-low">
-                        <h3 class="font-headline-md text-headline-md text-slate-900">Tambah / Edit Kriteria</h3>
+                        <h3 class="font-headline-md text-headline-md text-slate-900">Ringkasan Kriteria</h3>
                     </div>
-                    <form class="p-lg space-y-6">
-                        <!-- Input Kode -->
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Kode Kriteria</label>
-                            <input
-                                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all"
-                                placeholder="e.g. C5" type="text" />
+                    <div class="p-lg space-y-4">
+                        <!-- Total Bobot -->
+                        @php $totalWeight = $criterias->sum('weight'); @endphp
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-600">Total Bobot</span>
+                            <span class="font-bold {{ abs($totalWeight - 1) < 0.01 ? 'text-green-600' : 'text-red-500' }}">
+                                {{ number_format($totalWeight * 100, 0) }}%
+                            </span>
                         </div>
-                        <!-- Input Nama -->
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Nama Kriteria</label>
-                            <input
-                                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all"
-                                placeholder="e.g. Kerjasama Tim" type="text" />
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-600">Jumlah Kriteria</span>
+                            <span class="font-bold text-slate-900">{{ $criterias->total() }}</span>
                         </div>
-                        <!-- Weight Slider -->
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="text-sm font-bold text-slate-700">Bobot (%)</label>
-                                <span class="text-secondary font-bold" id="weight-value">20%</span>
-                            </div>
-                            <div class="relative flex items-center h-8">
-                                <input
-                                    class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-secondary transition-all"
-                                    max="100" min="0" type="range" value="20" />
-                            </div>
-                            <p class="text-[11px] text-slate-400 mt-2">Weight affects the final scoring impact of this
-                                criteria.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-600">Benefit</span>
+                            <span class="font-bold text-green-600">{{ $criterias->filter(fn($c) => $c->attribute === 'benefit')->count() }}</span>
                         </div>
-                        <!-- Dropdown Jenis -->
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Jenis Kriteria</label>
-                            <div class="relative">
-                                <select
-                                    class="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none appearance-none bg-white cursor-pointer transition-all">
-                                    <option value="benefit">Benefit (Makin besar makin baik)</option>
-                                    <option value="cost">Cost (Makin kecil makin baik)</option>
-                                </select>
-                                <span
-                                    class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 pointer-events-none">expand_more</span>
-                            </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-600">Cost</span>
+                            <span class="font-bold text-red-500">{{ $criterias->filter(fn($c) => $c->attribute === 'cost')->count() }}</span>
                         </div>
-                        <!-- Actions -->
-                        <div class="pt-4 flex flex-col gap-3">
-                            <button
-                                class="w-full bg-primary-container text-white py-3 rounded-lg font-bold shadow-md hover:bg-primary active:scale-[0.98] transition-all"
-                                type="submit">Simpan Kriteria</button>
-                            <button
-                                class="w-full border border-slate-200 text-slate-600 py-3 rounded-lg font-bold hover:bg-slate-50 active:scale-[0.98] transition-all"
-                                type="reset">Reset Form</button>
+                        <div class="pt-3 border-t border-slate-100">
+                            @if(abs($totalWeight - 1) < 0.01)
+                                <div class="flex items-center gap-2 text-green-700 bg-green-50 px-3 py-2 rounded-lg">
+                                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                    <span class="text-sm font-semibold">Bobot valid, siap proses SAW</span>
+                                </div>
+                            @else
+                                <div class="flex items-center gap-2 text-red-700 bg-red-50 px-3 py-2 rounded-lg">
+                                    <span class="material-symbols-outlined text-[18px]">warning</span>
+                                    <span class="text-sm font-semibold">Total bobot bukan 100%</span>
+                                </div>
+                            @endif
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <!-- Insights Section (Bento Style) -->
@@ -234,9 +153,9 @@
                         <span class="material-symbols-outlined" data-icon="pie_chart">pie_chart</span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Weight Distribution</h4>
-                        <p class="text-xl font-bold text-slate-900">Optimal</p>
-                        <p class="text-xs text-slate-400 mt-1">Sum of weights equals 100%</p>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Bobot</h4>
+                        <p class="text-xl font-bold text-slate-900">{{ number_format($criterias->sum('weight') * 100, 0) }}%</p>
+                        <p class="text-xs text-slate-400 mt-1">{{ abs($criterias->sum('weight') - 1) < 0.01 ? 'Bobot sudah optimal (100%)' : 'Perlu penyesuaian bobot' }}</p>
                     </div>
                 </div>
                 <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex items-start gap-4">
@@ -245,9 +164,9 @@
                         <span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Primary Criteria</h4>
-                        <p class="text-xl font-bold text-slate-900">Quality of Work</p>
-                        <p class="text-xs text-slate-400 mt-1">Holds the highest weight (30%)</p>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kriteria Tertinggi</h4>
+                        <p class="text-xl font-bold text-slate-900">{{ $criterias->sortByDesc('weight')->first()?->code ?? '-' }}</p>
+                        <p class="text-xs text-slate-400 mt-1">{{ $criterias->sortByDesc('weight')->first()?->name ?? 'Belum ada kriteria' }}</p>
                     </div>
                 </div>
                 <div class="bg-white p-lg rounded-xl border border-outline-variant shadow-sm flex items-start gap-4">
@@ -256,9 +175,9 @@
                         <span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
                     </div>
                     <div>
-                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">System Status</h4>
-                        <p class="text-xl font-bold text-slate-900">Valid</p>
-                        <p class="text-xs text-slate-400 mt-1">Criteria ready for SAW calculation</p>
+                        <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Status Sistem</h4>
+                        <p class="text-xl font-bold text-slate-900">{{ abs($criterias->sum('weight') - 1) < 0.01 ? 'Valid' : 'Perlu Cek' }}</p>
+                        <p class="text-xs text-slate-400 mt-1">{{ $criterias->total() }} kriteria terdaftar</p>
                     </div>
                 </div>
             </div>

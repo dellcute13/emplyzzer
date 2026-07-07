@@ -10,7 +10,8 @@ class Criteria extends Model
         'code',
         'name',
         'weight',
-        'attribute'
+        'attribute',
+        'description'
     ];
 
     public function evalutions()

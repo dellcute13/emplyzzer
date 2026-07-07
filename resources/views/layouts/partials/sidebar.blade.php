@@ -28,6 +28,11 @@
             <span class="material-symbols-outlined" data-icon="format_list_bulleted">format_list_bulleted</span>
             <span class="font-sans text-sm tracking-tight">Kriteria Penilaian</span>
         </a>
+        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['evaluation.evaluation-data', 'evaluation.evaluation-add', 'evaluation.evaluation-edit']) }}"
+            href="{{ route('evaluation.evaluation-data') }}">
+            <span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+            <span class="font-sans text-sm tracking-tight">Input Penilaian</span>
+        </a>
         <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('employee-grade') }}"
             href="{{ route('employee-grade') }}">
             <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
@@ -67,6 +72,13 @@
                     class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['master-data.grade-data', 'master-data.grade-add']) }}">
                     <span class="material-symbols-outlined text-[18px]">grading</span>
                     Data Grade
+                </a>
+                <a href="{{ route('master-data.period-data') }}"
+                    class="flex items-center gap-3 px-4 py-2 rounded-md text-sm text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition {{ set_active(['master-data.period-data', 'master-data.period-add']) }}">
+                    <span class="material-symbols-outlined text-[18px]">
+                        timeline
+                    </span>
+                    Data Periode
                 </a>
             </div>
         </div>

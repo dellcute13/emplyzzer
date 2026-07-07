@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('periods', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-
-            $table->foreignId('created_by')
-                  ->constrained('users')
-                  ->cascadeOnDelete();
-
-            $table->boolean('status')->default(1);
+            $table->string('name');
+            $table->enum('semester', ['1', '2']);
+            $table->year('year');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

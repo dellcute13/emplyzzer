@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CriteriaController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeGradeController;
 use App\Http\Controllers\EmployeePhotoController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\EmployeeRankController;
 use App\Http\Controllers\MasterData\DepartmentController;
 use App\Http\Controllers\MasterData\GradeController;
 use App\Http\Controllers\MasterData\PositionController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\PhotoAiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SawProcessController;
@@ -111,6 +113,14 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::post('department-update/{id}', 'departmentUpdate')->name('department-update');
                 Route::delete('department-delete/{id}', 'departmentDelete')->name('department-delete');
             });
+            Route::controller(PeriodController::class)->group(function () {
+                Route::get('period-data', 'periodData')->name('period-data');
+                Route::get('period-add', 'periodAdd')->name('period-add');
+                Route::post('period-store', 'periodStore')->name('period-store');
+                Route::get('period-edit/{id}', 'periodEdit')->name('period-edit');
+                Route::post('period-update/{id}', 'periodUpdate')->name('period-update');
+                Route::delete('period-delete/{id}', 'periodDelete')->name('period-delete');
+            });
         });
     });
 
@@ -134,33 +144,50 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
             Route::controller(CriteriaController::class)->group(function () {
                 Route::get('criteria-data', 'criteriaData')->name('criteria-data');
                 Route::get('criteria-add', 'criteriaAdd')->name('criteria-add');
+                Route::post('criteria-store', 'criteriaStore')->name('criteria-store');
+                Route::get('criteria-edit/{id}', 'criteriaEdit')->name('criteria-edit');
+                Route::post('criteria-update/{id}', 'criteriaUpdate')->name('criteria-update');
+                Route::delete('criteria-delete/{id}', 'criteriaDelete')->name('criteria-delete');
             });
         });
     });
 
     Route::middleware('auth')->group(function () {
-        // --------------------- Pages ------------------//
-        Route::controller(SawProcessController::class)->group(function () {
-            Route::get('sawprocess-data', 'sawProcess')->name('sawprocess-data');
+        Route::prefix('evaluation')->name('evaluation.')->group(function () {
+            Route::controller(EvaluationController::class)->group(function () {
+                Route::get('evaluation-data', 'evaluationData')->name('evaluation-data');
+                Route::get('evaluation-add', 'evaluationAdd')->name('evaluation-add');
+                Route::post('evaluation-store', 'evaluationStore')->name('evaluation-store');
+                Route::get('evaluation-edit/{employee_id}/{period_id}', 'evaluationEdit')->name('evaluation-edit');
+                Route::post('evaluation-update/{employee_id}/{period_id}', 'evaluationUpdate')->name('evaluation-update');
+                Route::delete('evaluation-delete/{employee_id}/{period_id}', 'evaluationDelete')->name('evaluation-delete');
+            });
         });
     });
 
     Route::middleware('auth')->group(function () {
-        // --------------------- Pages ------------------//
+        Route::controller(SawProcessController::class)->group(function () {
+            Route::get('sawprocess-data', 'sawProcess')->name('sawprocess-data');
+            Route::post('sawprocess-calculate', 'calculate')->name('sawprocess-calculate');
+            Route::get('sawprocess-result/{periodId}', 'showResult')->name('sawprocess-result');
+        });
+    });
+
+    Route::middleware('auth')->group(function () {
         Route::controller(EmployeeRankController::class)->group(function () {
             Route::get('employee-rank', 'employeeRank')->name('employee-rank');
         });
     });
 
     Route::middleware('auth')->group(function () {
-        // --------------------- Pages ------------------//
         Route::controller(ReportController::class)->group(function () {
             Route::get('report-data', 'reportData')->name('report-data');
+            Route::get('report-export-pdf', 'exportPdf')->name('report-export-pdf');
+            Route::get('report-export-excel', 'exportExcel')->name('report-export-excel');
         });
     });
 
     Route::middleware('auth')->group(function () {
-        // --------------------- Pages ------------------//
         Route::controller(EmployeeGradeController::class)->group(function () {
             Route::get('employee-grade', 'employeeGrade')->name('employee-grade');
         });
@@ -186,25 +213,4 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     });
 
 
-    Route::middleware('auth')->group(function () {
-        // --------------------- Projects ------------------//
-        Route::prefix('apps-project')->group(function () {
-            Route::controller(ProjectController::class)->group(function () {
-                Route::get('list', 'list')->name('apps-project/list');
-                Route::get('overview', 'overview')->name('apps-project/overview');
-                Route::get('create', 'create')->name('apps-project/create');
-            });
-        });
-    });
-
-    Route::middleware('auth')->group(function () {
-        // --------------------- Task ------------------//
-        Route::prefix('apps-task')->group(function () {
-            Route::controller(TaskController::class)->group(function () {
-                Route::get('kanban-board', 'kanbanBoard')->name('apps-task/kanban-board');
-                Route::get('list-view', 'listView')->name('apps-task/list-view');
-                Route::get('task-details', 'taskDetails')->name('apps-task/task-details');
-            });
-        });
-    });
 });

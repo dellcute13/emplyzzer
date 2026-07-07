@@ -44,6 +44,9 @@ class DatabaseSeeder extends Seeder
             GradeSeeder::class,
             DepartmentSeeder::class,
             PositionSeeder::class,
+            PeriodSeeder::class,
+            CriteriaSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }

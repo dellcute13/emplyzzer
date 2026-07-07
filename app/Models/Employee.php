@@ -32,6 +32,11 @@ class Employee extends Model
         return $this->hasMany(Evaluation::class);
     }
 
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class);
+    }
+
     public function rangkings()
     {
         return $this->hasMany(Ranking::class);

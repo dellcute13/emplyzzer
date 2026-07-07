@@ -8,8 +8,11 @@ class Period extends Model
 {
     protected $fillable = [
         'name',
-        'created_by',
-        'status'
+        'semester',
+        'year',
+        'start_date',
+        'end_date',
+        'is_active',
     ];
 
     public function evalutions()
