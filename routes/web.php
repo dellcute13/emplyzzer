@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.index');
     })->name('dashboard');
 
+    Route::get('/navbar-search', [EmployeeController::class, 'navbarSearch'])->name('navbar-search');
+
     Route::controller(LoginController::class)->group(function () {
         Route::post('/logout', 'logout')->name('logout');
         Route::get('/logout/page', 'logoutPage')->name('logout.page');

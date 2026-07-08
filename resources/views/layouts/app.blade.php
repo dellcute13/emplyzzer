@@ -256,16 +256,61 @@
     <script>
 document.addEventListener('alpine:init', () => {
     Alpine.store('menuSearch', {
-        query: '',
+        _query: '',
+        get query() {
+            return this._query;
+        },
+        set query(value) {
+            this._query = value;
+            this.selected = 0;
+            this.fetchDynamic(value);
+        },
         selected: 0,
-        menus: @json($menuItems ?? []), // atau isi array secara manual
+        dynamicResults: [],
+        staticMenus: [
+            { title: 'Dashboard', keywords: ['dashboard', 'home', 'beranda', 'utama'], route: "{{ route('dashboard') }}", icon: 'dashboard', subtitle: 'Menu Utama' },
+            { title: 'Data Pegawai', keywords: ['pegawai', 'employee', 'karyawan', 'list'], route: "{{ route('employee.employee-data') }}", icon: 'groups', subtitle: 'Menu Kepegawaian' },
+            { title: 'Kriteria Penilaian', keywords: ['kriteria', 'criteria', 'bobot'], route: "{{ route('criteria.criteria-data') }}", icon: 'format_list_bulleted', subtitle: 'Menu SAW' },
+            { title: 'Input Penilaian', keywords: ['input', 'penilaian', 'evaluasi', 'nilai'], route: "{{ route('evaluation.evaluation-data') }}", icon: 'assignment', subtitle: 'Menu SAW' },
+            { title: 'Nilai Pegawai', keywords: ['nilai', 'grade', 'skor'], route: "{{ route('employee-grade') }}", icon: 'edit_note', subtitle: 'Menu SAW' },
+            { title: 'Proses SAW', keywords: ['proses', 'saw', 'hitung', 'perhitungan'], route: "{{ route('sawprocess-data') }}", icon: 'calculate', subtitle: 'Menu SAW' },
+            { title: 'Data Posisi Pegawai', keywords: ['posisi', 'jabatan', 'role', 'master'], route: "{{ route('master-data.position-data') }}", icon: 'account_tree', subtitle: 'Master Data' },
+            { title: 'Data Departemen', keywords: ['departemen', 'divisi', 'master'], route: "{{ route('master-data.department-data') }}", icon: 'cases', subtitle: 'Master Data' },
+            { title: 'Data Grade', keywords: ['grade', 'golongan', 'master'], route: "{{ route('master-data.grade-data') }}", icon: 'grading', subtitle: 'Master Data' },
+            { title: 'Data Periode', keywords: ['periode', 'tahun', 'waktu', 'master'], route: "{{ route('master-data.period-data') }}", icon: 'timeline', subtitle: 'Master Data' },
+            { title: 'Hasil Ranking', keywords: ['ranking', 'hasil', 'peringkat', 'saw'], route: "{{ route('employee-rank') }}", icon: 'leaderboard', subtitle: 'Laporan & Hasil' },
+            { title: 'Laporan', keywords: ['laporan', 'report', 'print', 'cetak'], route: "{{ route('report-data') }}", icon: 'description', subtitle: 'Laporan & Hasil' },
+            { title: 'Pengguna', keywords: ['pengguna', 'user', 'admin', 'akun'], route: "{{ route('users.user-data') }}", icon: 'person', subtitle: 'Pengaturan Sistem' }
+        ],
+
+        async fetchDynamic(q) {
+            const trimmed = q.trim();
+            if (trimmed.length < 2) {
+                this.dynamicResults = [];
+                return;
+            }
+            try {
+                const res = await fetch(`/navbar-search?q=${encodeURIComponent(trimmed)}`);
+                if (res.ok) {
+                    this.dynamicResults = await res.json();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        },
+
         get filtered() {
-            if (this.query.trim() === '') return [];
-            const q = this.query.toLowerCase();
-            return this.menus.filter(menu =>
+            const q = this.query.trim().toLowerCase();
+            if (q === '') return [];
+
+            // Filter static menus
+            const filteredMenus = this.staticMenus.filter(menu =>
                 menu.title.toLowerCase().includes(q) ||
                 menu.keywords.some(k => k.toLowerCase().includes(q))
             );
+
+            // Combine static menus and dynamic search results (employees, positions, departments)
+            return [...filteredMenus, ...this.dynamicResults];
         }
     });
 });

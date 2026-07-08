@@ -35,28 +35,35 @@
                 x-show="$store.menuSearch.filtered.length"
                 x-transition
                 @click.outside="$store.menuSearch.query=''"
-                class="absolute left-0 right-0 mt-2 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50">
+                class="absolute left-0 right-0 mt-2 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50 max-h-96 overflow-y-auto">
 
                 <template
                     x-for="(menu,index) in $store.menuSearch.filtered"
-                    :key="menu.title">
+                    :key="index + '-' + menu.title">
 
                     <a
                         :href="menu.route"
-                        class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition"
+                        class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-100 transition"
                         :class="{
                     'bg-slate-100': index === $store.menuSearch.selected
                 }">
 
                         <span
-                            class="material-symbols-outlined text-slate-500"
+                            class="material-symbols-outlined text-slate-400 flex-shrink-0"
                             x-text="menu.icon">
                         </span>
 
-                        <span
-                            class="text-sm font-medium"
-                            x-text="menu.title">
-                        </span>
+                        <div class="flex flex-col min-w-0">
+                            <span
+                                class="text-sm font-medium text-slate-700 truncate"
+                                x-text="menu.title">
+                            </span>
+                            <span
+                                x-show="menu.subtitle"
+                                class="text-[11px] text-slate-400 truncate"
+                                x-text="menu.subtitle">
+                            </span>
+                        </div>
 
                     </a>
 
