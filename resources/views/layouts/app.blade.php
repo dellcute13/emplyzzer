@@ -12,6 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Emplyzer Dashboard' }}</title>
 
+    <script defer src="https://cdn.jsdevr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -251,6 +252,24 @@
 
         </div>
     </div>
+
+    <script>
+document.addEventListener('alpine:init', () => {
+    Alpine.store('menuSearch', {
+        query: '',
+        selected: 0,
+        menus: @json($menuItems ?? []), // atau isi array secara manual
+        get filtered() {
+            if (this.query.trim() === '') return [];
+            const q = this.query.toLowerCase();
+            return this.menus.filter(menu =>
+                menu.title.toLowerCase().includes(q) ||
+                menu.keywords.some(k => k.toLowerCase().includes(q))
+            );
+        }
+    });
+});
+</script>
 
     @stack('scripts')
 </body>

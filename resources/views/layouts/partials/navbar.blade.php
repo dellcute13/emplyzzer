@@ -1,10 +1,69 @@
 <div x-data="{ notificationDrawer: false }" class="relative">
     <header
         class="sticky top-0 z-40 w-full h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex justify-between items-center px-8">
-        <div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full w-96">
-            <span class="material-symbols-outlined text-slate-400 text-sm mr-2" data-icon="search">search</span>
-            <input class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-600"
-                placeholder="Search employee data..." type="text" />
+        <div
+            x-data
+            class="relative w-96">
+
+            <div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full">
+
+                <span class="material-symbols-outlined text-slate-400 text-sm mr-2">
+                    search
+                </span>
+
+                <input
+                    type="text"
+                    placeholder="Search menu..."
+
+                    x-model="$store.menuSearch.query"
+
+                    @keydown.escape="$store.menuSearch.query=''"
+                    @keydown.arrow-down.prevent="$store.menuSearch.selected = Math.min($store.menuSearch.selected + 1, $store.menuSearch.filtered.length - 1)"
+                    @keydown.arrow-up.prevent="$store.menuSearch.selected = Math.max($store.menuSearch.selected - 1, 0)"
+                    @keydown.enter.prevent="
+                if($store.menuSearch.filtered.length){
+                    window.location.href = $store.menuSearch.filtered[$store.menuSearch.selected].route;
+                }
+            "
+
+                    class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-600" />
+
+            </div>
+
+            <!-- Dropdown -->
+            <div
+                x-show="$store.menuSearch.filtered.length"
+                x-transition
+                @click.outside="$store.menuSearch.query=''"
+                class="absolute left-0 right-0 mt-2 bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden z-50">
+
+                <template
+                    x-for="(menu,index) in $store.menuSearch.filtered"
+                    :key="menu.title">
+
+                    <a
+                        :href="menu.route"
+                        class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100 transition"
+                        :class="{
+                    'bg-slate-100': index === $store.menuSearch.selected
+                }">
+
+                        <span
+                            class="material-symbols-outlined text-slate-500"
+                            x-text="menu.icon">
+                        </span>
+
+                        <span
+                            class="text-sm font-medium"
+                            x-text="menu.title">
+                        </span>
+
+                    </a>
+
+                </template>
+
+            </div>
+
         </div>
         <div class="flex items-center space-x-6">
             <button @click="notificationDrawer = true"
