@@ -7,8 +7,7 @@
         <div class="flex justify-between items-end mb-8">
             <div>
                 <h2 class="font-headline-lg text-headline-lg text-slate-900">Kriteria Penilaian</h2>
-                <p class="text-on-primary-container font-body-md mt-1">Configure criteria and weights for Simple Additive
-                    Weighting (SAW) calculation.</p>
+                <p class="text-on-primary-container font-body-md mt-1">Atur kriteria, jenis (Benefit/Cost), dan bobot yang digunakan dalam perhitungan metode Simple Additive Weighting (SAW).</p>
             </div>
             <a
                 class="flex items-center gap-2 bg-primary-container text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-primary transition-all active:scale-95"
