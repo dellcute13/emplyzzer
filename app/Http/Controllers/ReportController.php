@@ -63,20 +63,115 @@ class ReportController extends Controller
 
     public function reportData(Request $request)
     {
-        $selectedPeriodId = Period::where('is_active', 1)->first()->id ?? 1;
+        $periods = Period::orderBy('year', 'desc')->orderBy('semester', 'desc')->get();
+        $selectedPeriodId = $request->get('period_id', Period::where('is_active', 1)->first()->id ?? ($periods->first()->id ?? null));
 
-        // Perform dynamic SAW calculation to get department stats and rankings
-        $criterias = Criteria::orderBy('code')->get();
-        $employees = Employee::with(['evaluations' => function($q) use ($selectedPeriodId) {
-            $q->where('period_id', $selectedPeriodId);
-        }, 'department'])->get();
+        // Perform dynamic SAW calculation using helper
+        $preferences = $selectedPeriodId ? $this->calculateRankings($selectedPeriodId) : [];
 
         $deptScores = [];
+        foreach ($preferences as $pref) {
+            if ($pref['department'] !== '-') {
+                $deptScores[$pref['department']][] = $pref['total'];
+            }
+        }
+
+        // Calculate averages for each department
+        $deptAverages = [];
+        foreach ($deptScores as $deptName => $scores) {
+            $deptAverages[$deptName] = count($scores) > 0 ? (array_sum($scores) / count($scores)) : 0;
+        }
+
+        // Sort descending to get the best department
+        arsort($deptAverages);
+
+        $bestDeptName = !empty($deptAverages) ? array_key_first($deptAverages) : 'N/A';
+        $bestDeptScore = !empty($deptAverages) ? round(reset($deptAverages), 3) : 0;
+
         $totalReports = Report::count();
         $lastReport = Report::latest()->first();
 
+        // Retrieve dynamic reports list
+        $reports = Report::latest()->paginate(10);
+
+        return view('report.report-data', compact(
+            'periods',
+            'selectedPeriodId',
+            'preferences',
+            'totalReports',
+            'lastReport',
+            'bestDeptName',
+            'bestDeptScore',
+            'deptAverages',
+            'reports'
+        ));
+    }
+
+    public function getRankings($periodId)
+    {
+        $preferences = $this->calculateRankings($periodId);
+        $period = Period::find($periodId);
+        return response()->json([
+            'period_name' => $period ? $period->name : 'N/A',
+            'rankings' => $preferences
+        ]);
+    }
+
+    public function generateReport(Request $request)
+    {
+        $reportType = $request->input('report_type', 'Monthly Performance Summary');
+        $dateRange = $request->input('date_range', date('Y-m-d') . ' to ' . date('Y-m-d'));
+        
+        $periods = Period::all();
+        $selectedPeriodId = $request->input('period_id', Period::where('is_active', 1)->first()->id ?? ($periods->first()->id ?? 1));
+        $selectedPeriod = Period::find($selectedPeriodId);
+        
+        $ext = $reportType === 'Audit Eksekutif Tahunan' ? 'xlsx' : 'pdf';
+        
+        // Clean name
+        $nameClean = str_replace(' ', '_', $reportType);
+        $periodNameClean = $selectedPeriod ? str_replace(' ', '_', $selectedPeriod->name) : 'Periode';
+        $fileName = $nameClean . '_' . $periodNameClean . '_' . date('Ymd_His') . '.' . $ext;
+
+        $firstEmployee = Employee::first();
+
+        Report::create([
+            'period_id'   => $selectedPeriodId,
+            'employee_id' => $firstEmployee->id ?? null,
+            'file_name'   => $fileName,
+            'file_type'   => $ext === 'xlsx' ? 'excel' : 'pdf'
+        ]);
+
+        return redirect()->route('report-data', ['period_id' => $selectedPeriodId])
+                         ->with('success', 'Laporan ' . $fileName . ' berhasil di-generate!');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $periodId = $request->get('period_id');
+        $period = Period::findOrFail($periodId);
+        
+        $preferences = $this->calculateRankings($periodId);
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('report.pdf-rankings', compact('period', 'preferences'));
+        
+        return $pdf->download('Laporan_Rankings_' . str_replace(' ', '_', $period->name) . '.pdf');
+    }
+
+    private function calculateRankings($periodId)
+    {
+        $criterias = Criteria::orderBy('code')->get();
+        $employees = Employee::whereHas('evaluations', function($q) use ($periodId) {
+            $q->where('period_id', $periodId);
+        })->with(['evaluations' => function($q) use ($periodId) {
+            $q->where('period_id', $periodId);
+        }, 'position', 'department'])->get();
+
+        $matrix = [];
+        $normalized = [];
+        $preferences = [];
+
         if ($employees->isNotEmpty() && $criterias->isNotEmpty()) {
-            $matrix = [];
             $minMax = [];
             foreach ($criterias as $crit) {
                 $scores = [];
@@ -92,7 +187,6 @@ class ReportController extends Controller
                 ];
             }
 
-            $normalized = [];
             foreach ($employees as $emp) {
                 foreach ($criterias as $crit) {
                     $score = $matrix[$emp->id][$crit->id];
@@ -113,59 +207,21 @@ class ReportController extends Controller
                     $norm = $normalized[$emp->id][$crit->id];
                     $totalVal += $norm * $crit->weight;
                 }
-                
-                if ($emp->department) {
-                    $deptScores[$emp->department->name][] = $totalVal;
-                }
+                $preferences[] = [
+                    'employee_id' => $emp->id,
+                    'name' => $emp->name,
+                    'nip' => $emp->nip,
+                    'position' => $emp->position->name ?? '-',
+                    'department' => $emp->department->name ?? '-',
+                    'total' => round($totalVal, 4),
+                ];
             }
+
+            usort($preferences, function($a, $b) {
+                return $b['total'] <=> $a['total'];
+            });
         }
 
-        // Calculate averages for each department
-        $deptAverages = [];
-        foreach ($deptScores as $deptName => $scores) {
-            $deptAverages[$deptName] = count($scores) > 0 ? (array_sum($scores) / count($scores)) : 0;
-        }
-
-        // Sort descending to get the best department
-        arsort($deptAverages);
-
-        $bestDeptName = !empty($deptAverages) ? array_key_first($deptAverages) : 'N/A';
-        $bestDeptScore = !empty($deptAverages) ? round(reset($deptAverages), 3) : 0;
-
-        // Retrieve dynamic reports list
-        $reports = Report::latest()->paginate(10);
-
-        return view('report.report-data', compact(
-            'totalReports',
-            'lastReport',
-            'bestDeptName',
-            'bestDeptScore',
-            'deptAverages',
-            'reports'
-        ));
-    }
-
-    public function generateReport(Request $request)
-    {
-        $reportType = $request->input('report_type', 'Monthly Performance Summary');
-        $dateRange = $request->input('date_range', date('Y-m-d') . ' to ' . date('Y-m-d'));
-        
-        $activePeriod = Period::where('is_active', 1)->first() ?? Period::first();
-        $ext = $reportType === 'Audit Eksekutif Tahunan' ? 'xlsx' : 'pdf';
-        
-        // Clean name
-        $nameClean = str_replace(' ', '_', $reportType);
-        $fileName = $nameClean . '_' . date('Ymd_His') . '.' . $ext;
-
-        $firstEmployee = Employee::first();
-
-        Report::create([
-            'period_id'   => $activePeriod->id ?? 1,
-            'employee_id' => $firstEmployee->id ?? null,
-            'file_name'   => $fileName,
-            'file_type'   => $ext === 'xlsx' ? 'excel' : 'pdf'
-        ]);
-
-        return redirect()->route('report-data')->with('success', 'Laporan ' . $fileName . ' berhasil di-generate!');
+        return $preferences;
     }
 }

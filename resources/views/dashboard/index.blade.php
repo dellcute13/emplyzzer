@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="p-8 space-y-8">
+    <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
         <!-- Header Section -->
         <div class="flex flex-col gap-1">
             <h2 class="font-headline-lg text-headline-lg text-slate-900">Dashboard Overview</h2>
@@ -216,8 +216,8 @@
                     <button class="p-2 hover:bg-slate-50 rounded-lg">
                         <span class="material-symbols-outlined text-slate-400" data-icon="more_vert">more_vert</span>
                     </button>
-                </div>
-                <table class="w-full text-left">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
                     <thead class="bg-slate-50">
                         <tr>
                             <th
@@ -318,6 +318,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <div class="px-lg py-4 bg-slate-50 flex items-center justify-between">
                     <p class="text-xs text-on-primary-container font-medium">Showing 1 to 3 of 10 entries</p>
                     <div class="flex gap-2">

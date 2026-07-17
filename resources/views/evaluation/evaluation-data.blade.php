@@ -28,19 +28,94 @@
             </div>
         @endif
 
-        <!-- Filter Period -->
-        <form method="GET" action="{{ route('evaluation.evaluation-data') }}" class="flex items-end gap-4">
-            <div class="space-y-1">
-                <label class="font-label-sm text-slate-700 uppercase">Filter Periode</label>
-                <select name="period_id" onchange="this.form.submit()"
-                    class="bg-white border border-slate-200 rounded-lg px-3.5 py-2.5 text-body-md font-body-md outline-none focus:ring-2 focus:ring-primary-container">
-                    <option value="">Semua Periode</option>
+        <!-- Filter Period (Alpine.js Style with Search & Pagination) -->
+        <form method="GET" action="{{ route('evaluation.evaluation-data') }}" id="periodFilterForm" class="flex items-end gap-4" 
+            x-data="{
+                open: false,
+                search: '',
+                page: 1,
+                perPage: 15,
+                selected: '{{ $selectedPeriod ? ($periods->firstWhere('id', $selectedPeriod)->name ?? 'Semua Periode') : 'Semua Periode' }}',
+                selectedVal: '{{ $selectedPeriod ?? '' }}',
+                items: [
+                    { id: '', name: 'Semua Periode' },
                     @foreach($periods as $period)
-                        <option value="{{ $period->id }}" {{ $selectedPeriod == $period->id ? 'selected' : '' }}>
-                            {{ $period->name }} — Semester {{ $period->semester }}/{{ $period->year }}
-                        </option>
+                        { id: '{{ $period->id }}', name: '{{ $period->name }} — Semester {{ $period->semester }}/{{ $period->year }}' },
                     @endforeach
-                </select>
+                ],
+                get filteredItems() {
+                    return this.items.filter(item => 
+                        item.name.toLowerCase().includes(this.search.toLowerCase())
+                    );
+                },
+                get paginatedItems() {
+                    let start = (this.page - 1) * this.perPage;
+                    return this.filteredItems.slice(start, start + this.perPage);
+                },
+                get totalPages() {
+                    return Math.ceil(this.filteredItems.length / this.perPage) || 1;
+                },
+                nextPage() {
+                    if (this.page < this.totalPages) this.page++;
+                },
+                prevPage() {
+                    if (this.page > 1) this.page--;
+                },
+                selectItem(item) {
+                    this.selected = item.name;
+                    this.selectedVal = item.id;
+                    this.open = false;
+                }
+            }">
+            <div class="space-y-1 relative z-50" @click.outside="open = false">
+                <label class="font-label-sm text-slate-700 uppercase">Filter Periode</label>
+                <input type="hidden" name="period_id" :value="selectedVal">
+                <button type="button" @click="open = !open; if(open) { $nextTick(() => $refs.searchInput.focus()); page = 1; search = ''; }"
+                    class="bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-body-md font-semibold text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-600 h-11 outline-none min-w-[255px] flex items-center justify-between hover:border-indigo-600 text-left">
+                    <span x-text="selected"></span>
+                    <span class="material-symbols-outlined text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''">
+                        expand_more
+                    </span>
+                </button>
+                <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                    class="absolute left-0 mt-2 w-full min-w-[255px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl z-50">
+                    
+                    <!-- Search Input -->
+                    <div class="p-2 border-b border-slate-100 bg-slate-50">
+                        <input type="text" x-model="search" x-ref="searchInput" @input="page = 1" placeholder="Cari..." 
+                            class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white font-normal text-slate-700">
+                    </div>
+
+                    <!-- Items List -->
+                    <div class="max-h-60 overflow-y-auto font-normal text-slate-700">
+                        <template x-for="item in paginatedItems" :key="item.id">
+                            <button type="button" @click="selectItem(item); $nextTick(() => $el.closest('form').submit())"
+                                class="w-full px-4 py-3 text-left text-sm hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
+                                <span x-text="item.name"></span>
+                            </button>
+                        </template>
+                        <div x-show="filteredItems.length === 0" class="px-4 py-4 text-xs text-slate-400 italic text-center">
+                            Data tidak ditemukan
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div x-show="totalPages > 1" class="flex items-center justify-between px-3 py-2 border-t border-slate-100 bg-slate-50 text-[11px] text-slate-500 font-normal">
+                        <button type="button" @click="prevPage()" :disabled="page === 1" class="px-2 py-0.5 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Prev
+                        </button>
+                        <span>Page <span x-text="page"></span> of <span x-text="totalPages"></span></span>
+                        <button type="button" @click="nextPage()" :disabled="page === totalPages" class="px-2 py-0.5 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Next
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </form>
 

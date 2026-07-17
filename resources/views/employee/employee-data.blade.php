@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="p-8 space-y-8 flex-1">
+    <section class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 flex-1">
         <!-- Header Section -->
-        <div class="flex justify-between items-end">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h2 class="font-headline-lg text-headline-lg text-on-surface">Data Pegawai</h2>
                 <p class="font-body-md text-body-md text-on-surface-variant">Kelola informasi dasar dan jabatan seluruh
                     karyawan dalam sistem.</p>
             </div>
-            <a class="flex items-center bg-primary text-on-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95"
+            <a class="flex items-center bg-primary text-on-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95 whitespace-nowrap"
                 href="{{ route('employee.employee-add') }}">
                 <span class="material-symbols-outlined mr-2" data-icon="add">add</span>
                 Tambah Pegawai

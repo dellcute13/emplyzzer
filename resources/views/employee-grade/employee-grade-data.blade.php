@@ -52,15 +52,88 @@
                                 <h3 class="font-bold text-lg text-slate-900">Pilih Pegawai & Periode</h3>
                                 <p class="text-xs text-slate-500">Tentukan kandidat dan periode penilaian saat ini</p>
                             </div>
-                            <div>
-                                <select name="period_id" required class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm focus:ring-2 focus:ring-primary-container outline-none min-w-[200px]">
-                                    <option value="" disabled selected>Pilih Periode Penilaian</option>
+                            <div x-data="{
+                                openPeriod: false,
+                                search: '',
+                                page: 1,
+                                perPage: 15,
+                                selectedPeriodName: 'Pilih Periode Penilaian',
+                                selectedPeriodId: '',
+                                items: [
                                     @foreach ($periods as $period)
-                                        <option value="{{ $period->id }}">
-                                            {{ $period->name }}
-                                        </option>
+                                        { id: {{ $period->id }}, name: '{{ $period->name }}' },
                                     @endforeach
-                                </select>
+                                ],
+                                get filteredItems() {
+                                    return this.items.filter(item => 
+                                        item.name.toLowerCase().includes(this.search.toLowerCase())
+                                    );
+                                },
+                                get paginatedItems() {
+                                    let start = (this.page - 1) * this.perPage;
+                                    return this.filteredItems.slice(start, start + this.perPage);
+                                },
+                                get totalPages() {
+                                    return Math.ceil(this.filteredItems.length / this.perPage) || 1;
+                                },
+                                nextPage() {
+                                    if (this.page < this.totalPages) this.page++;
+                                },
+                                prevPage() {
+                                    if (this.page > 1) this.page--;
+                                },
+                                selectItem(item) {
+                                    this.selectedPeriodName = item.name;
+                                    this.selectedPeriodId = item.id;
+                                    this.openPeriod = false;
+                            }" class="relative z-[60]" @click.outside="openPeriod = false">
+                                <input type="hidden" name="period_id" :value="selectedPeriodId" required>
+                                <button type="button" @click="openPeriod = !openPeriod; if(openPeriod) { $nextTick(() => $refs.searchPeriod.focus()); page = 1; search = ''; }"
+                                    class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm focus:ring-2 focus:ring-indigo-600 outline-none min-w-[200px] flex items-center justify-between hover:border-slate-400">
+                                    <span x-text="selectedPeriodName" class="text-left" :class="selectedPeriodName == 'Pilih Periode Penilaian' ? 'text-slate-400' : 'text-slate-800'"></span>
+                                    <span class="material-symbols-outlined text-slate-400 transition-transform duration-200" :class="openPeriod ? 'rotate-180' : ''">
+                                        expand_more
+                                    </span>
+                                </button>
+                                <div x-show="openPeriod" x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                    x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                    x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                    class="absolute right-0 mt-2 w-full min-w-[200px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl z-50">
+                                    
+                                    <!-- Search Input -->
+                                    <div class="p-2 border-b border-slate-100 bg-slate-50">
+                                        <input type="text" x-model="search" x-ref="searchPeriod" @input="page = 1" placeholder="Cari..." 
+                                            class="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 bg-white font-normal text-slate-700">
+                                    </div>
+
+                                    <!-- Items List -->
+                                    <div class="max-h-60 overflow-y-auto font-normal text-slate-700">
+                                        <template x-for="item in paginatedItems" :key="item.id">
+                                            <button type="button" @click="selectItem(item)"
+                                                class="w-full px-4 py-3 text-left text-sm hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
+                                                <span x-text="item.name"></span>
+                                            </button>
+                                        </template>
+                                        <div x-show="filteredItems.length === 0" class="px-4 py-4 text-xs text-slate-400 italic text-center">
+                                            Data tidak ditemukan
+                                        </div>
+                                    </div>
+
+                                    <!-- Pagination -->
+                                    <div x-show="totalPages > 1" class="flex items-center justify-between px-3 py-2 border-t border-slate-100 bg-slate-50 text-[11px] text-slate-500 font-normal">
+                                        <button type="button" @click="prevPage()" :disabled="page === 1" class="px-2 py-0.5 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            Prev
+                                        </button>
+                                        <span>Page <span x-text="page"></span> of <span x-text="totalPages"></span></span>
+                                        <button type="button" @click="nextPage()" :disabled="page === totalPages" class="px-2 py-0.5 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            Next
+                                        </button>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 

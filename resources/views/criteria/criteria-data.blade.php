@@ -2,16 +2,16 @@
 
 @section('content')
     <!-- Header Section -->
-    <section class="p-8 space-y-8 flex-1">
+    <section class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 flex-1">
 
-        <div class="flex justify-between items-end mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
                 <h2 class="font-headline-lg text-headline-lg text-slate-900">Kriteria Penilaian</h2>
                 <p class="text-on-primary-container font-body-md mt-1">Configure criteria and weights for Simple Additive
                     Weighting (SAW) calculation.</p>
             </div>
             <a
-                class="flex items-center gap-2 bg-primary-container text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-primary transition-all active:scale-95"
+                class="flex items-center gap-2 bg-primary-container text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-primary transition-all active:scale-95 whitespace-nowrap"
                 href="{{ route('criteria.criteria-add') }}">
                 <span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
                 Tambah Kriteria

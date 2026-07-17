@@ -1,15 +1,25 @@
 <!-- Side Navigation Shell -->
+<!-- Mobile Sidebar Backdrop -->
+<div x-show="sidebarOpen" x-cloak x-transition.opacity class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 lg:hidden" @click="sidebarOpen = false"></div>
+
 <aside
-    class="fixed left-0 top-0 h-screen w-[260px] bg-white border-r border-slate-200 shadow-sm flex flex-col py-6 z-50">
-    <div class="px-6 mb-8 flex items-center gap-3">
-        <div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
-            <span class="material-symbols-outlined text-white" data-icon="analytics">analytics</span>
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+    class="fixed left-0 top-0 h-screen w-[260px] bg-white border-r border-slate-200 shadow-sm flex flex-col py-6 z-50 transform transition-transform duration-300 ease-in-out">
+    <div class="px-6 mb-8 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" data-icon="analytics">analytics</span>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-slate-900 leading-tight">Emplyzer</h1>
+                <p class="text-[10px] uppercase tracking-wider text-on-primary-container font-semibold">SAW Method
+                    System</p>
+            </div>
         </div>
-        <div>
-            <h1 class="text-xl font-bold text-slate-900 leading-tight">Emplyzer</h1>
-            <p class="text-[10px] uppercase tracking-wider text-on-primary-container font-semibold">SAW Method
-                System</p>
-        </div>
+        <!-- Close Button for Mobile -->
+        <button @click="sidebarOpen = false" class="lg:hidden text-slate-500 hover:text-slate-900 focus:outline-none flex items-center justify-center p-1 rounded-lg hover:bg-slate-100 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+        </button>
     </div>
     <nav class="flex-1 space-y-1 px-3">
         <!-- Dashboard (Active) -->

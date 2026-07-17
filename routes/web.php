@@ -184,6 +184,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::middleware('auth')->group(function () {
         Route::controller(ReportController::class)->group(function () {
             Route::get('report-data', 'reportData')->name('report-data');
+            Route::get('report-data/rankings/{periodId}', 'getRankings')->name('report-data-rankings');
             Route::post('report-generate', 'generateReport')->name('report-generate');
             Route::get('report-export-pdf', 'exportPdf')->name('report-export-pdf');
             Route::get('report-export-excel', 'exportExcel')->name('report-export-excel');

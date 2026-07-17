@@ -12,7 +12,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Emplyzer Dashboard' }}</title>
 
-    <script defer src="https://cdn.jsdevr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {{-- Vite Assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -177,15 +176,15 @@
     </style>
 </head>
 
-<body x-data="{ logoutModal: false }" class="font-body-md text-on-surface antialiased">
+<body x-data="{ logoutModal: false, sidebarOpen: false }" class="font-body-md text-on-surface antialiased">
 
 
     @include('layouts.partials.sidebar')
 
-    <main class="ml-[260px] min-h-screen">
+    <main class="lg:ml-[260px] min-h-screen">
 
         @include('layouts.partials.navbar')
-        <section class="flex-1 p-8">
+        <section class="flex-1 p-4 sm:p-6 md:p-8">
             @yield('content')
             @include('layouts.partials.flash')
         </section>
