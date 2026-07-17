@@ -203,6 +203,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
                 Route::get('user-data', 'userData')->name('user-data');
                 Route::get('user-add', 'userAdd')->name('user-add');
                 Route::post('/store', 'store')->name('users.store');
+                Route::get('user-edit/{id}', 'userEdit')->name('user-edit');
+                Route::post('user-update/{id}', 'userUpdate')->name('user-update');
+                Route::delete('user-delete/{id}', 'userDelete')->name('user-delete');
             });
         });
     });
