@@ -14,11 +14,8 @@ export default defineConfig({
         tailwindcss(),   // <-- ini wajib untuk Tailwind v4
     ],
     server: {
-        host: true,
+        host: 'localhost',
         port: 5173,
         strictPort: true,
-        hmr: {
-            host: '192.168.1.2',
-        },
     },
 });
