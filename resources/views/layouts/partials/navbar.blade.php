@@ -1,40 +1,39 @@
 <div x-data="{ notificationDrawer: false }" class="relative">
     <header
-        class="sticky top-0 z-40 w-full h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex justify-between items-center px-4 md:px-8">
-        <div class="flex items-center gap-3 flex-1 max-w-xs sm:max-w-sm md:max-w-md">
-            <!-- Hamburger Menu Button for Mobile/Tablet -->
-            <button @click="sidebarOpen = true" class="lg:hidden text-slate-500 hover:text-slate-900 transition-opacity focus:outline-none flex items-center justify-center p-1 rounded-lg hover:bg-slate-100 transition-colors">
-                <span class="material-symbols-outlined text-2xl">menu</span>
-            </button>
+    class="sticky top-0 z-40 h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center px-6">
 
-            <div
-                x-data
-                class="relative w-full">
+    <!-- KIRI -->
+    <div class="flex items-center gap-3">
 
-                <div class="flex items-center bg-surface-container-low px-4 py-1.5 rounded-full">
+        <button
+            @click="sidebarOpen = true"
+            class="lg:hidden text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-slate-100">
+            <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
 
-                    <span class="material-symbols-outlined text-slate-400 text-sm mr-2">
-                        search
-                    </span>
+        <div x-data class="relative">
 
-                    <input
-                        type="text"
-                        placeholder="Search menu..."
+            <div class="flex items-center bg-surface-container-low rounded-full px-4 py-2 w-[520px]">
 
-                        x-model="$store.menuSearch.query"
+                <span class="material-symbols-outlined text-slate-400 mr-2">
+                    search
+                </span>
 
-                        @keydown.escape="$store.menuSearch.query=''"
-                        @keydown.arrow-down.prevent="$store.menuSearch.selected = Math.min($store.menuSearch.selected + 1, $store.menuSearch.filtered.length - 1)"
-                        @keydown.arrow-up.prevent="$store.menuSearch.selected = Math.max($store.menuSearch.selected - 1, 0)"
-                        @keydown.enter.prevent="
-                    if($store.menuSearch.filtered.length){
-                        window.location.href = $store.menuSearch.filtered[$store.menuSearch.selected].route;
-                    }
-                "
+                <input
+                    type="text"
+                    placeholder="Search menu..."
+                    x-model="$store.menuSearch.query"
+                    @keydown.escape="$store.menuSearch.query=''"
+                    @keydown.arrow-down.prevent="$store.menuSearch.selected = Math.min($store.menuSearch.selected + 1, $store.menuSearch.filtered.length - 1)"
+                    @keydown.arrow-up.prevent="$store.menuSearch.selected = Math.max($store.menuSearch.selected - 1, 0)"
+                    @keydown.enter.prevent="
+                        if($store.menuSearch.filtered.length){
+                            window.location.href = $store.menuSearch.filtered[$store.menuSearch.selected].route;
+                        }
+                    "
+                    class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-600 py-0">
 
-                        class="bg-transparent border-none focus:ring-0 text-sm w-full text-slate-600 py-0" />
-
-                </div>
+            </div>
 
             <!-- Dropdown -->
             <div
@@ -45,30 +44,29 @@
 
                 <template
                     x-for="(menu,index) in $store.menuSearch.filtered"
-                    :key="index + '-' + menu.title">
+                    :key="index">
 
                     <a
                         :href="menu.route"
-                        class="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-100 transition"
-                        :class="{
-                    'bg-slate-100': index === $store.menuSearch.selected
-                }">
+                        class="flex items-center gap-3 px-4 py-3 hover:bg-slate-100"
+                        :class="{ 'bg-slate-100': index === $store.menuSearch.selected }">
 
                         <span
-                            class="material-symbols-outlined text-slate-400 flex-shrink-0"
+                            class="material-symbols-outlined text-slate-400"
                             x-text="menu.icon">
                         </span>
 
-                        <div class="flex flex-col min-w-0">
-                            <span
-                                class="text-sm font-medium text-slate-700 truncate"
+                        <div>
+                            <div
+                                class="text-sm font-medium"
                                 x-text="menu.title">
-                            </span>
-                            <span
+                            </div>
+
+                            <div
                                 x-show="menu.subtitle"
-                                class="text-[11px] text-slate-400 truncate"
+                                class="text-xs text-slate-400"
                                 x-text="menu.subtitle">
-                            </span>
+                            </div>
                         </div>
 
                     </a>
@@ -78,26 +76,47 @@
             </div>
 
         </div>
-        <div class="flex items-center space-x-6">
-            <button @click="notificationDrawer = true"
-                class="text-slate-500 hover:text-slate-900 transition-opacity relative">
-                <span class="material-symbols-outlined">
-                    notifications
-                </span>
-                <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white">
-                </span>
-            </button>
-            <button class="text-slate-500 hover:text-slate-900 transition-opacity">
-                <span class="material-symbols-outlined" data-icon="settings">settings</span>
-            </button>
-            <div class="hidden sm:flex items-center space-x-3 cursor-pointer pl-4 md:pl-6 border-l border-slate-200">
-                <div class="text-right">
-                    <p class="text-xs font-bold text-slate-900 leading-none">{{ Auth::user()->name }}</p>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-tighter">{{ Auth::user()->role }}</p>
-                </div>
-            </div>
+
+    </div>
+
+    <!-- KANAN -->
+    <div class="ml-auto flex items-center gap-6">
+
+        <button
+            @click="notificationDrawer = true"
+            class="relative text-slate-500 hover:text-slate-900">
+
+            <span class="material-symbols-outlined">
+                notifications
+            </span>
+
+            <span
+                class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 border border-white">
+            </span>
+
+        </button>
+
+        <button
+            class="text-slate-500 hover:text-slate-900">
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+        </button>
+
+        <div class="h-8 w-px bg-slate-200"></div>
+
+        <div class="text-right whitespace-nowrap">
+            <p class="text-sm font-bold text-slate-900">
+                {{ Auth::user()->name }}
+            </p>
+            <p class="text-xs uppercase text-slate-500">
+                {{ Auth::user()->role }}
+            </p>
         </div>
-    </header>
+
+    </div>
+
+</header>
     <div x-show="notificationDrawer" x-cloak x-transition.opacity class="fixed inset-0 bg-black/30 backdrop-blur-[2px] z-40"
         @click="notificationDrawer = false">
     </div>
