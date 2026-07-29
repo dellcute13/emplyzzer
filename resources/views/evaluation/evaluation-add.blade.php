@@ -3,7 +3,7 @@
 @section('content')
     <section class="p-8 space-y-8 flex-1">
         <div class="flex items-center gap-2 text-slate-500 mb-2">
-            <span class="text-label-sm font-label-sm">Input Penilaian</span>
+            <span class="text-label-sm font-label-sm">Nilai Pegawai</span>
             <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
             <span class="text-label-sm font-label-sm text-secondary">Tambah Penilaian</span>
         </div>

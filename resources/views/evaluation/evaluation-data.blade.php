@@ -5,14 +5,16 @@
         <!-- Header Section -->
         <div class="flex justify-between items-end">
             <div>
-                <h2 class="font-headline-lg text-headline-lg text-on-surface">Input Penilaian</h2>
+                <h2 class="font-headline-lg text-headline-lg text-on-surface">Nilai Pegawai</h2>
                 <p class="font-body-md text-body-md text-on-surface-variant">Kelola data penilaian pegawai per periode untuk proses SAW.</p>
             </div>
+            @can('write-data')
             <a class="flex items-center bg-primary text-on-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95"
                 href="{{ route('evaluation.evaluation-add') }}">
                 <span class="material-symbols-outlined mr-2" data-icon="add">add</span>
                 Tambah Penilaian
             </a>
+            @endcan
         </div>
 
         @if(session('success'))
@@ -172,26 +174,28 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end gap-2">
-                                        @if($selectedPeriod)
-                                            <a href="{{ route('evaluation.evaluation-edit', [$employee->id, $selectedPeriod]) }}"
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
-                                                <span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
-                                            </a>
-                                            <form action="{{ route('evaluation.evaluation-delete', [$employee->id, $selectedPeriod]) }}"
-                                                method="POST" class="inline"
-                                                onsubmit="return confirm('Hapus semua nilai {{ $employee->name }} pada periode ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
-                                                    <span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <a href="{{ route('evaluation.evaluation-add', ['employee_id' => $employee->id]) }}"
-                                                class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
-                                                <span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
-                                            </a>
-                                        @endif
+                                        @can('write-data')
+                                            @if($selectedPeriod)
+                                                <a href="{{ route('evaluation.evaluation-edit', [$employee->id, $selectedPeriod]) }}"
+                                                    class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
+                                                    <span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+                                                </a>
+                                                <form action="{{ route('evaluation.evaluation-delete', [$employee->id, $selectedPeriod]) }}"
+                                                    method="POST" class="inline"
+                                                    onsubmit="return confirm('Hapus semua nilai {{ $employee->name }} pada periode ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
+                                                        <span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('evaluation.evaluation-add', ['employee_id' => $employee->id]) }}"
+                                                    class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
+                                                    <span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+                                                </a>
+                                            @endif
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -200,7 +204,9 @@
                                 <td colspan="5" class="px-6 py-12 text-center text-slate-400">
                                     @if($selectedPeriod)
                                         Belum ada penilaian pada periode ini.
-                                        <a href="{{ route('evaluation.evaluation-add', ['period_id' => $selectedPeriod]) }}" class="text-primary font-medium ml-1">Tambah sekarang</a>
+                                        @can('write-data')
+                                            <a href="{{ route('evaluation.evaluation-add', ['period_id' => $selectedPeriod]) }}" class="text-primary font-medium ml-1">Tambah sekarang</a>
+                                        @endcan
                                     @else
                                         Belum ada data penilaian.
                                     @endif

@@ -86,6 +86,7 @@
                                     this.selectedPeriodName = item.name;
                                     this.selectedPeriodId = item.id;
                                     this.openPeriod = false;
+                                }
                             }" class="relative z-[60]" @click.outside="openPeriod = false">
                                 <input type="hidden" name="period_id" :value="selectedPeriodId" required>
                                 <button type="button" @click="openPeriod = !openPeriod; if(openPeriod) { $nextTick(() => $refs.searchPeriod.focus()); page = 1; search = ''; }"
@@ -218,6 +219,7 @@
 
                         <!-- Actions -->
                         <div class="bg-slate-50 p-6 flex justify-end gap-4 border-t border-slate-100">
+                            @can('write-data')
                             <button type="button" @click="selectedEmployee = null; selectedId = ''; selected = 'Pilih salah satu pegawai...'"
                                 class="px-6 py-2.5 rounded-xl text-slate-600 border border-slate-200 font-semibold hover:bg-slate-100 transition">
                                 Reset Form
@@ -227,6 +229,12 @@
                                 <span class="material-symbols-outlined text-sm">save</span>
                                 Simpan Nilai
                             </button>
+                            @else
+                            <p class="text-sm text-slate-500 italic flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm text-slate-400">info</span>
+                                Anda hanya memiliki akses melihat data (view-only).
+                            </p>
+                            @endcan
                         </div>
                     </div>
                 </div>

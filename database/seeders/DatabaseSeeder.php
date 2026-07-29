@@ -16,28 +16,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+        ]);
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        User::factory()->create([
+        $zacky = User::factory()->create([
             'name' => 'Zacky Sheesh',
             'email' => 'user.zacky@gmail.com',
             'role' => 'Administrator',
             'status' => 'Active',
             'password' => Hash::make('zacky123'),                                           
-
         ]);
+        $zacky->assignRole('Administrator');
 
-        User::factory()->create([
+        $della = User::factory()->create([
             'name' => 'Della Sheesh',
             'email' => 'user.della@gmail.com',
             'role' => 'Manager',
             'status' => 'Active',
             'password' => Hash::make('della123'),
         ]);
+        $della->assignRole('Manager');
         
 
         $this->call([
@@ -47,6 +46,7 @@ class DatabaseSeeder extends Seeder
             PeriodSeeder::class,
             CriteriaSeeder::class,
             EmployeeSeeder::class,
+            EvaluationSeeder::class,
         ]);
     }
 }

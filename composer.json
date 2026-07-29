@@ -17,7 +17,8 @@
         "laravel/ui": "*",
         "php-flasher/flasher": "*",
         "php-flasher/flasher-laravel": "*",
-        "php-flasher/flasher-notyf-laravel": "*"
+        "php-flasher/flasher-notyf-laravel": "*",
+        "spatie/laravel-permission": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

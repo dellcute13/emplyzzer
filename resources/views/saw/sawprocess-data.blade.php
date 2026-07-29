@@ -107,9 +107,14 @@
                 <div class="space-y-2">
                     <h3 class="text-xl font-bold text-slate-900">Belum Ada Data Penilaian</h3>
                     <p class="text-slate-500 text-sm max-w-md mx-auto">
-                        Untuk memulai perhitungan SAW pada periode ini, silakan masukkan penilaian pegawai terlebih dahulu atau gunakan fitur simulasi pengisian nilai otomatis di bawah ini.
+                        @can('write-data')
+                            Untuk memulai perhitungan SAW pada periode ini, silakan masukkan penilaian pegawai terlebih dahulu atau gunakan fitur simulasi pengisian nilai otomatis di bawah ini.
+                        @else
+                            Untuk memulai perhitungan SAW pada periode ini, silakan masukkan penilaian pegawai terlebih dahulu.
+                        @endcan
                     </p>
                 </div>
+                @can('write-data')
                 <div>
                     <form method="GET" action="{{ route('sawprocess-data') }}">
                         <input type="hidden" name="period_id" value="{{ $selectedPeriodId }}">
@@ -120,6 +125,7 @@
                         </button>
                     </form>
                 </div>
+                @endcan
             </div>
         @else
             <!-- Step Navigation -->
@@ -382,6 +388,7 @@
                     </div>
 
                     <!-- Reset/Simulate Card -->
+                    @can('write-data')
                     <div class="bg-indigo-905 text-white p-6 rounded-xl shadow-lg relative overflow-hidden" style="background-color: #1e1b4b;">
                         <div class="relative z-10 space-y-4">
                             <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider">Reset & Simulasi</h4>
@@ -398,6 +405,7 @@
                         </div>
                         <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
                     </div>
+                    @endcan
 
                     <!-- Quick tips -->
                     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">

@@ -29,7 +29,9 @@ class EmployeeController extends Controller
 
         $query = Employee::with([
             'position',
-            'department'
+            'department',
+            'evaluations.criteria',
+            'evaluations.period'
         ]);
 
         if ($sort == 'name_asc') {

@@ -9,12 +9,14 @@
                 <h2 class="font-headline-lg text-headline-lg text-slate-900">Kriteria Penilaian</h2>
                 <p class="text-on-primary-container font-body-md mt-1">Atur kriteria, jenis (Benefit/Cost), dan bobot yang digunakan dalam perhitungan metode Simple Additive Weighting (SAW).</p>
             </div>
+            @can('write-data')
             <a
                 class="flex items-center gap-2 bg-primary-container text-white px-6 py-2.5 rounded-lg font-medium shadow-sm hover:bg-primary transition-all active:scale-95 whitespace-nowrap"
                 href="{{ route('criteria.criteria-add') }}">
                 <span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
                 Tambah Kriteria
             </a>
+            @endcan
         </div>
         <!-- Dashboard Layout (Asymmetric Grid) -->
         <div class="grid grid-cols-12 gap-gutter">
@@ -72,6 +74,7 @@
                                         @endif
                                     </td>
                                     <td class="px-lg py-5 text-right">
+                                        @can('write-data')
                                         <div class="flex justify-end gap-2">
                                             <a href="{{ route('criteria.criteria-edit', $criteria->id) }}"
                                                 class="p-2 hover:bg-slate-100 rounded-lg text-secondary transition-colors">
@@ -87,6 +90,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endcan
                                     </td>
                                 </tr>
                                 @empty

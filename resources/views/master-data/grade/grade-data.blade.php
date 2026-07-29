@@ -8,11 +8,13 @@
             <h2 class="font-headline-lg text-headline-lg text-on-surface">Data Grade</h2>
             <p class="font-body-md text-body-md text-on-surface-variant">Kelola master data yang ada dalam sistem.</p>
         </div>
+        @can('write-data')
         <a class="flex items-center justify-center bg-primary text-on-primary px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95 w-full sm:w-auto text-center"
             href="{{ route('master-data.grade-add') }}">
             <span class="material-symbols-outlined mr-2" data-icon="add">add</span>
             Tambah Grade
         </a>
+        @endcan
     </div>
     <!-- Dashboard Content -->
     <div class="bg-white rounded-xl border border-slate-200 custom-shadow overflow-hidden">
@@ -43,7 +45,7 @@
                         </td>
                         <td class="px-4 py-3 sm:px-6 sm:py-4 text-right">
                             <div class="flex justify-end space-x-2">
-
+                                @can('write-data')
                                 <a href="{{ route('master-data.grade-edit', $grade->id) }}"
                                     class="p-2 text-slate-400 hover:text-primary transition-colors"
                                     title="Edit">
@@ -65,6 +67,7 @@
                                         </span>
                                     </button>
                                 </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>

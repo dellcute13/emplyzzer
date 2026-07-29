@@ -93,7 +93,7 @@
                     selectedPeriodVal: {{ $selectedPeriodId ?? 'null' }},
                     items: [
                         @foreach ($periods as $period)
-                            { id: {{ $period->id }}, name: '{{ $period->name }} {{ $period->is_active ? \'(Aktif)\' : \'\' }}' },
+                            { id: {{ $period->id }}, name: '{{ $period->name }} {{ $period->is_active ? '(Aktif)' : '' }}' },
                         @endforeach
                     ],
                     get filteredItems() {
@@ -229,11 +229,19 @@
                                     </div>
                                 </div>
                             </div>
+                            @can('write-data')
                             <button type="submit"
                                 class="bg-indigo-600 text-white px-xl h-11 rounded-lg font-data-tabular hover:bg-indigo-700 transition-colors flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">summarize</span>
                                 Generate Report
                             </button>
+                            @else
+                            <button type="button" disabled
+                                class="bg-slate-200 text-slate-400 px-xl h-11 rounded-lg font-data-tabular flex items-center gap-2 cursor-not-allowed">
+                                <span class="material-symbols-outlined text-sm">summarize</span>
+                                Generate Report
+                            </button>
+                            @endcan
                         </div>
                     </form>
                 </div>

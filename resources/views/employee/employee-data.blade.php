@@ -1,7 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 flex-1">
+    <section class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 flex-1"
+        x-data="{
+            detailModalOpen: false,
+            selectedEmployee: null,
+            activePeriod: '',
+            showDetail(employee) {
+                this.selectedEmployee = employee;
+                this.detailModalOpen = true;
+                
+                // Set default active period to first available period
+                let periods = Object.keys(this.evaluationsGroupedByPeriod);
+                this.activePeriod = periods.length > 0 ? periods[0] : '';
+            },
+            get evaluationsGroupedByPeriod() {
+                if (!this.selectedEmployee || !this.selectedEmployee.evaluations) return {};
+                let grouped = {};
+                this.selectedEmployee.evaluations.forEach(ev => {
+                    if (!grouped[ev.period_name]) {
+                        grouped[ev.period_name] = [];
+                    }
+                    grouped[ev.period_name].push(ev);
+                });
+                return grouped;
+            },
+            averageScoreForActivePeriod() {
+                if (!this.activePeriod) return '0.0';
+                let evs = this.evaluationsGroupedByPeriod[this.activePeriod];
+                if (!evs || evs.length === 0) return '0.0';
+                let sum = evs.reduce((acc, ev) => acc + ev.score, 0);
+                return (sum / evs.length).toFixed(1);
+            }
+        }">
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -9,11 +40,13 @@
                 <p class="font-body-md text-body-md text-on-surface-variant">Kelola informasi dasar dan jabatan seluruh
                     karyawan dalam sistem.</p>
             </div>
+            @can('write-data')
             <a class="flex items-center bg-primary text-on-primary px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all active:scale-95 whitespace-nowrap"
                 href="{{ route('employee.employee-add') }}">
                 <span class="material-symbols-outlined mr-2" data-icon="add">add</span>
                 Tambah Pegawai
             </a>
+            @endcan
         </div>
         <!-- Dashboard Content -->
         <div class="bg-white rounded-xl border border-slate-200 custom-shadow overflow-hidden">
@@ -170,12 +203,34 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex justify-end space-x-2">
-                                        <button class="p-2 text-slate-400 hover:text-secondary transition-colors"
+                                         <button type="button" 
+                                            @click="showDetail({
+                                                name: '{{ addslashes($employee->name) }}',
+                                                nip: '{{ $employee->nip }}',
+                                                gender: '{{ $employee->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}',
+                                                position: '{{ $employee->position->name ?? '-' }}',
+                                                department: '{{ $employee->department->name ?? '-' }}',
+                                                join_date: '{{ $employee->join_date ? \Carbon\Carbon::parse($employee->join_date)->translatedFormat('d F Y') : '-' }}',
+                                                status: '{{ $employee->status == 'permanent' ? 'Permanen' : 'Kontrak' }}',
+                                                photo: '{{ $employee->photo ? asset('storage/' . $employee->photo) : asset('assets/images/default-user.png') }}',
+                                                evaluations: [
+                                                    @foreach($employee->evaluations as $eval)
+                                                        {
+                                                            criteria_code: '{{ $eval->criteria->code }}',
+                                                            criteria_name: '{{ addslashes($eval->criteria->name) }}',
+                                                            period_name: '{{ addslashes($eval->period->name) }}',
+                                                            score: {{ $eval->score }}
+                                                        },
+                                                    @endforeach
+                                                ]
+                                            })"
+                                            class="p-2 text-slate-400 hover:text-secondary transition-colors"
                                             title="Detail">
                                             <span class="material-symbols-outlined text-sm">
                                                 visibility
                                             </span>
-                                        </button>
+                                         </button>
+                                        @can('write-data')
                                         <a href="{{ route('employee.employee-edit', $employee->id) }}"
                                             class="p-2 text-slate-400 hover:text-primary transition-colors" title="Edit">
                                             <span class="material-symbols-outlined text-sm">
@@ -188,6 +243,7 @@
                                                 delete
                                             </span>
                                         </button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -234,6 +290,7 @@
                 </div>
             </div>
         </div>
+        @include('employee.partials.detail-modal')
     </section>
     <!-- Quick Info Banner -->
     <section class="px-8 pb-8">

@@ -40,11 +40,6 @@
         </a>
         <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['evaluation.evaluation-data', 'evaluation.evaluation-add', 'evaluation.evaluation-edit']) }}"
             href="{{ route('evaluation.evaluation-data') }}">
-            <span class="material-symbols-outlined" data-icon="assignment">assignment</span>
-            <span class="font-sans text-sm tracking-tight">Input Penilaian</span>
-        </a>
-        <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active('employee-grade') }}"
-            href="{{ route('employee-grade') }}">
             <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
             <span class="font-sans text-sm tracking-tight">Nilai Pegawai</span>
         </a>
@@ -103,11 +98,13 @@
             <span class="font-sans text-sm tracking-tight">Laporan</span>
         </a>
         <div class="pt-4 mt-4 border-t border-slate-100">
-            <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['users.user-data', 'users.user-add']) }}"
-                href="{{ route('users.user-data') }}">
-                <span class="material-symbols-outlined" data-icon="person_manage">person</span>
-                <span class="font-sans text-sm tracking-tight">Pengguna</span>
-            </a>
+            @can('manage-users')
+                <a class="flex items-center rounded-md gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-200 {{ set_active(['users.user-data', 'users.user-add']) }}"
+                    href="{{ route('users.user-data') }}">
+                    <span class="material-symbols-outlined" data-icon="person_manage">person</span>
+                    <span class="font-sans text-sm tracking-tight">Pengguna</span>
+                </a>
+            @endcan
             <button @click="logoutModal = true"
                 class="flex items-center rounded-md gap-3 px-4 py-3 text-error hover:bg-error-container/10 transition-colors duration-200">
 

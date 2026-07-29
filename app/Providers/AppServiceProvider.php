@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('id');
 
+        // Role authorization gates are now handled automatically by Spatie Permission using permissions seeded in the database.
+
         view()->composer('layouts.partials.navbar', function ($view) {
             // Get latest employees
             $newEmployees = \App\Models\Employee::latest()->take(3)->get()->map(function($emp) {

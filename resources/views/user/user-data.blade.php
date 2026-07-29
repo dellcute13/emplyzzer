@@ -8,11 +8,13 @@
                 <p class="font-body-md text-body-md text-slate-500 mt-1">Kelola hak akses, peran, dan aktivitas pengguna
                     dalam sistem DSS.</p>
             </div>
+            @can('add-user')
             <a class="flex items-center justify-center space-x-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-slate-800 active:opacity-80 transition-all shadow-sm"
                 href="{{ route('users.user-add') }}">
                 <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
                 <span>Tambah Pengguna</span>
             </a>
+            @endcan
         </div>
         <!-- Stats Bento Grid -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -42,8 +44,8 @@
                             data-icon="supervised_user_circle">supervised_user_circle</span>
                     </div>
                 </div>
-                <p class="font-label-sm text-label-sm text-slate-500 uppercase">Manager / Staff</p>
-                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $staffManagerCount }}</h3>
+                <p class="font-label-sm text-label-sm text-slate-500 uppercase">Manager / User</p>
+                <h3 class="font-display-xl text-display-xl text-slate-900">{{ $userManagerCount }}</h3>
             </div>
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
                 <div class="flex items-center justify-between mb-4">
@@ -305,9 +307,9 @@
                                         Manager
                                     </button>
 
-                                    <button type="button" @click="selected='Staff'; open=false"
+                                    <button type="button" @click="selected='User'; open=false"
                                         class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
-                                        Staff
+                                        User
                                     </button>
                                 </div>
                             </div>
@@ -366,24 +368,21 @@
                             <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mt-1.5"></div>
                             <div>
                                 <p class="text-xs font-bold text-slate-900">Administrator</p>
-                                <p class="text-[11px] text-slate-500">Akses penuh ke semua modul, pengaturan sistem, dan
-                                    manajemen database.</p>
+                                <p class="text-[11px] text-slate-500">Akses penuh ke semua modul, kecuali menambahkan pengguna baru.</p>
                             </div>
                         </div>
                         <div class="flex space-x-3">
                             <div class="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5"></div>
                             <div>
                                 <p class="text-xs font-bold text-slate-900">Manager</p>
-                                <p class="text-[11px] text-slate-500">Dapat mengelola kriteria, melakukan perhitungan SAW,
-                                    dan melihat laporan.</p>
+                                <p class="text-[11px] text-slate-500">Akses penuh ke semua modul dan manajemen data/pengguna.</p>
                             </div>
                         </div>
                         <div class="flex space-x-3">
                             <div class="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5"></div>
                             <div>
-                                <p class="text-xs font-bold text-slate-900">Staff</p>
-                                <p class="text-[11px] text-slate-500">Hanya dapat menginput data nilai pegawai dan melihat
-                                    hasil perangkingan.</p>
+                                <p class="text-xs font-bold text-slate-900">User</p>
+                                <p class="text-[11px] text-slate-500">Hanya dapat melihat semua data (view-only), tidak dapat melakukan tambah, ubah, dan hapus data.</p>
                             </div>
                         </div>
                     </div>

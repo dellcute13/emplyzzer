@@ -40,9 +40,9 @@ class UserController extends Controller
             'Administrator'
         )->count();
 
-        $staffManagerCount = User::whereIn(
+        $userManagerCount = User::whereIn(
             'role',
-            ['Manager', 'Staff']
+            ['Manager', 'User']
         )->count();
 
         $onlineCount = User::where(
@@ -59,7 +59,7 @@ class UserController extends Controller
                 'onlineCount',
                 'totalUsers',
                 'adminCount',
-                'staffManagerCount'
+                'userManagerCount'
             )
         );
     }

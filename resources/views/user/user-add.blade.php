@@ -68,10 +68,10 @@
 
                                     <span>Manager</span>
                                 </button>
-                                <button type="button" @click="selected='Staff'; selectedLabel='Staff'; open=false"
+                                <button type="button" @click="selected='User'; selectedLabel='User'; open=false"
                                     class="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 border-t border-slate-100 transition">
 
-                                    <span>Staff</span>
+                                    <span>User</span>
                                 </button>
                             </div>
                         </div>
