@@ -96,13 +96,7 @@
 
         </button>
 
-        <button
-            class="text-slate-500 hover:text-slate-900">
-            <span class="material-symbols-outlined">
-                settings
-            </span>
-        </button>
-
+        
         <div class="h-8 w-px bg-slate-200"></div>
 
         <div class="text-right whitespace-nowrap">
