@@ -126,9 +126,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     });
 
 
-    Route::post('/photo-process', [EmployeePhotoController::class, 'process']);
-    Route::post('/generate-photo-ai', [PhotoAiController::class, 'generate']);
-    Route::post('/generate-photo-ai', [EmployeeController::class, 'generateAI']);
+    // Routes for photo uploads are handled directly via the standard form submission (e.g. employee.employee-store / update)
+    // Route::post('/photo-process', [EmployeePhotoController::class, 'process']);
+    // Route::post('/generate-photo-ai', [PhotoAiController::class, 'generate']);
+    // Route::post('/generate-photo-ai', [EmployeeController::class, 'generateAI']);
 
     Route::get('/pegawai/create', [EmployeeController::class, 'create']);
     Route::post('/pegawai/store', [EmployeeController::class, 'store']);

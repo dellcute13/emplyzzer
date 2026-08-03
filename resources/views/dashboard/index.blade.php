@@ -47,9 +47,9 @@
                         Top Score: {{ $bestEmployee ? number_format($bestEmployee['total'], 3) : '0.000' }}</p>
                 </div>
                 <div class="w-12 h-12 bg-secondary-fixed rounded-full flex items-center justify-center overflow-hidden">
-                    @if($bestEmployee && $bestEmployee['photo'] && $bestEmployee['photo'] !== 'assets/images/default-user.png')
+                    @if($bestEmployee && $bestEmployee['has_photo'])
                         <img alt="{{ $bestEmployee['name'] }}" class="w-full h-full object-cover"
-                            src="{{ asset($bestEmployee['photo']) }}" />
+                            src="{{ $bestEmployee['photo'] }}" />
                     @else
                         <div class="w-full h-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm">
                             {{ $bestEmployee ? strtoupper(substr($bestEmployee['name'], 0, 2)) : '-' }}
@@ -238,9 +238,9 @@
                                 </td>
                                 <td class="px-lg py-4">
                                     <div class="flex items-center gap-3">
-                                        @if($pref['photo'] && $pref['photo'] !== 'assets/images/default-user.png')
+                                        @if($pref['has_photo'])
                                             <img alt="{{ $pref['name'] }}" class="w-10 h-10 rounded-full object-cover"
-                                                src="{{ asset($pref['photo']) }}" />
+                                                src="{{ $pref['photo'] }}" />
                                         @else
                                             <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center border border-slate-200">
                                                 {{ strtoupper(substr($pref['name'], 0, 2)) }}

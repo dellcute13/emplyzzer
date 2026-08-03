@@ -164,7 +164,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($employee->photo)
-                                        <img src="{{ asset('storage/' . $employee->photo) }}" alt="{{ $employee->name }}"
+                                        <img src="{{ $employee->photo_url }}" alt="{{ $employee->name }}"
                                             class="w-20 h-20 rounded-full object-cover">
                                     @else
                                         <div
@@ -212,7 +212,7 @@
                                                 department: '{{ $employee->department->name ?? '-' }}',
                                                 join_date: '{{ $employee->join_date ? \Carbon\Carbon::parse($employee->join_date)->translatedFormat('d F Y') : '-' }}',
                                                 status: '{{ $employee->status == 'permanent' ? 'Permanen' : 'Kontrak' }}',
-                                                photo: '{{ $employee->photo ? asset('storage/' . $employee->photo) : asset('assets/images/default-user.png') }}',
+                                                photo: '{{ $employee->photo_url }}',
                                                 evaluations: [
                                                     @foreach($employee->evaluations as $eval)
                                                         {

@@ -18,7 +18,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
                 <!-- Left Column: Photo Upload -->
                 <div class="lg:col-span-4 space-y-lg">
-                    <div class="bg-white rounded-xl custom-shadow border border-slate-100 p-lg" x-data="photoUploader('{{ $employee->photo ? asset('storage/' . $employee->photo) : '' }}')">
+                    <div class="bg-white rounded-xl custom-shadow border border-slate-100 p-lg" x-data="photoUploader('{{ $employee->photo ? $employee->photo_url : '' }}')">
                         <h3 class="text-headline-md font-headline-md text-primary-container mb-md flex items-center gap-2">
                             <span class="material-symbols-outlined text-secondary">
                                 add_a_photo
@@ -30,15 +30,10 @@
                                 @change="previewImage($event)">
                             <div @click="$refs.file.click()"
                                 class="aspect-square w-full rounded-xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer group-hover:border-secondary/50">
-                                <template x-if="imageUrl && !resultUrl">
+                                <template x-if="imageUrl">
                                     <img :src="imageUrl" class="w-full h-full object-cover">
                                 </template>
-
-                                {{-- Preview Result AI --}}
-                                <template x-if="resultUrl">
-                                    <img :src="resultUrl" class="w-full h-full object-cover">
-                                </template>
-                                <template x-if="!imageUrl && !resultUrl">
+                                <template x-if="!imageUrl">
                                     <div class="text-center">
                                         <span class="material-symbols-outlined text-slate-400 text-4xl mb-2">
                                             cloud_upload
@@ -50,54 +45,16 @@
                                 </template>
                             </div>
                         </div>
-                        {{-- Hidden final path untuk dikirim ke Laravel --}}
-                        <input type="hidden" name="photo_ai" x-model="photoAi">
+                        <input type="hidden" name="remove_photo" :value="removePhoto ? 1 : 0">
                         <div class="mt-4 space-y-3">
-                            <button type="button" x-show="imageUrl && !resultUrl" @click="generateAI()"
-                                class="w-full bg-slate-900 text-white py-3 rounded-xl font-semibold">
-                                <span x-show="!loading">Generate AI Background</span>
-                                <span x-show="loading">Processing...</span>
-                            </button>
-                            <button type="button" x-show="resultUrl" @click="usePhoto()"
-                                class="w-full bg-emerald-500 text-white py-3 rounded-xl font-semibold">
-                                Gunakan Foto Ini
-                            </button>
                             <button type="button" x-show="imageUrl" @click="$refs.file.click()"
                                 class="w-full border border-slate-200 py-3 rounded-xl font-semibold text-slate-600">
                                 Ganti Foto
                             </button>
-                            <div class="grid grid-cols-2 gap-3" x-show="imageUrl && !resultUrl">
-                                <label @click="size = '3x4'"
-                                    :class="size === '3x4'
-                                        ?
-                                        'border-secondary bg-secondary/10 text-secondary' :
-                                        'border-slate-200 bg-white text-slate-600'"
-                                    class="cursor-pointer rounded-xl border-2 p-4 transition-all">
-                                    <input type="radio" value="3x4" x-model="size" class="hidden">
-                                    <div class="flex flex-col items-center gap-3">
-                                        <div class="w-10 h-14 rounded-md border-2 border-current"></div>
-                                        <div class="text-center">
-                                            <p class="font-semibold">3x4</p>
-                                            <p class="text-xs opacity-70">Standar Pegawai</p>
-                                        </div>
-                                    </div>
-                                </label>
-                                <label @click="size = '4x6'"
-                                    :class="size === '4x6'
-                                        ?
-                                        'border-secondary bg-secondary/10 text-secondary' :
-                                        'border-slate-200 bg-white text-slate-600'"
-                                    class="cursor-pointer rounded-xl border-2 p-4 transition-all">
-                                    <input type="radio" value="4x6" x-model="size" class="hidden">
-                                    <div class="flex flex-col items-center gap-3">
-                                        <div class="w-10 h-16 rounded-md border-2 border-current"></div>
-                                        <div class="text-center">
-                                            <p class="font-semibold">4x6</p>
-                                            <p class="text-xs opacity-70">Lebih Tinggi</p>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
+                            <button type="button" x-show="imageUrl" @click="clearPhoto()"
+                                class="w-full border border-red-200 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50 transition-colors">
+                                Hapus Foto
+                            </button>
                         </div>
                         <p class="text-xs text-slate-500 text-center italic mt-3">
                             JPG/PNG maks 2MB
@@ -508,77 +465,26 @@
         });
     </script>
     <script>
-        function photoUploader(existingPhoto = '', existingPath = '') {
+        function photoUploader(existingPhoto = '') {
             return {
-
                 imageUrl: existingPhoto,
-                resultUrl: null,
-                loading: false,
                 file: null,
-                photoAi: existingPath,
-                size: '3x4',
+                removePhoto: false,
 
                 previewImage(event) {
-
                     const file = event.target.files[0];
-
                     if (!file) return;
 
                     this.file = file;
-
-                    this.resultUrl = null;
-
-                    this.photoAi = '';
-
                     this.imageUrl = URL.createObjectURL(file);
+                    this.removePhoto = false;
                 },
 
-                async generateAI() {
-
-                    this.loading = true;
-
-                    console.log("Ukuran dipilih:", this.size);
-
-                    let formData = new FormData();
-
-                    formData.append('photo', this.file);
-
-                    formData.append('size', this.size);
-
-                    try {
-
-                        let csrf = document.querySelector('meta[name="csrf-token"]')?.content;
-
-                        let response = await fetch('/generate-photo-ai', {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': csrf
-                            }
-                        });
-
-                        let data = await response.json();
-
-                        if (data.success) {
-
-                            this.resultUrl = data.url;
-
-                            this.photoAi = data.path;
-
-                        } else {
-
-                            alert('Generate gagal');
-                        }
-
-                    } catch (error) {
-
-                        console.log(error);
-
-                        alert('Terjadi error');
-                    }
-
-                    this.loading = false;
+                clearPhoto() {
+                    this.file = null;
+                    this.imageUrl = null;
+                    this.$refs.file.value = '';
+                    this.removePhoto = true;
                 }
             }
         }

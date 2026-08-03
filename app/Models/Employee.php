@@ -41,4 +41,15 @@ class Employee extends Model
     {
         return $this->hasMany(Ranking::class);
     }
+
+    public function getPhotoUrlAttribute()
+    {
+        if (!$this->photo) {
+            return asset('assets/images/default-user.png');
+        }
+        if (str_starts_with($this->photo, 'assets/') || str_starts_with($this->photo, 'http')) {
+            return asset($this->photo);
+        }
+        return asset('storage/' . $this->photo);
+    }
 }

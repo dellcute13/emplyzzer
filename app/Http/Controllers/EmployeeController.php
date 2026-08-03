@@ -164,14 +164,29 @@ class EmployeeController extends Controller
                 ],
                 'name'          => 'required|max:100',
                 'gender'        => 'required|in:P,L',
-                'photo_ai'      => 'nullable|string',
+                'photo'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'position_id'   => 'required|exists:positions,id',
                 'department_id' => 'required|exists:departments,id',
                 'join_date'     => 'nullable|date',
                 'status'        => 'required|in:permanent,contract',
             ]);
 
-            $validated['photo'] = $request->photo_ai;
+            if ($request->hasFile('photo')) {
+                if ($employee->photo && !str_starts_with($employee->photo, 'assets/') && Storage::disk('public')->exists($employee->photo)) {
+                    Storage::disk('public')->delete($employee->photo);
+                }
+                $file = $request->file('photo');
+                $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('profile', $filename, 'public');
+                $validated['photo'] = $path;
+            } elseif ($request->input('remove_photo') == 1) {
+                if ($employee->photo && !str_starts_with($employee->photo, 'assets/') && Storage::disk('public')->exists($employee->photo)) {
+                    Storage::disk('public')->delete($employee->photo);
+                }
+                $validated['photo'] = null;
+            } else {
+                $validated['photo'] = $employee->photo;
+            }
 
             $employee->update($validated);
             DB::commit();
@@ -179,45 +194,9 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            if (
-                $request->photo_ai &&
-                Storage::disk('public')->exists($request->photo_ai)
-            ) {
-                Storage::disk('public')->delete($request->photo_ai);
-            }
             return back()->withInput()->with('error', 'Update pegawai gagal: ' . $e->getMessage());
         }
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'photo' => 'required|image'
-    //     ]);
-
-    //     $file = $request->file('photo');
-
-    //     $tempName = time() . '_temp.' . $file->extension();
-    //     $finalName = time() . '_final.jpg';
-
-    //     $tempPath = storage_path('app/public/temp/' . $tempName);
-    //     $finalPath = storage_path('app/public/profile/' . $finalName);
-
-    //     $file->move(dirname($tempPath), basename($tempPath));
-
-    //     $python = "python3";
-    //     $script = base_path('scripts/process_photo.py');
-
-    //     exec("$python $script $tempPath $finalPath");
-
-    //     Employee::create([
-    //         'name' => $request->name,
-    //         'photo' => 'profile/' . $finalName
-    //     ]);
-
-    //     return back()->with('success', 'Pegawai berhasil ditambah');
-    // }
 
     public function store(Request $request)
     {
@@ -229,14 +208,21 @@ class EmployeeController extends Controller
                 'nip'           => 'required|unique:employees,nip',
                 'name'          => 'required|max:100',
                 'gender'        => 'required|in:P,L',
-                'photo_ai'      => 'nullable|string',
+                'photo'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'position_id'   => 'required|exists:positions,id',
                 'department_id' => 'required|exists:departments,id',
                 'join_date'     => 'nullable|date',
                 'status'        => 'required|in:permanent,contract',
             ]);
 
-            $validated['photo'] = $request->photo_ai;
+            if ($request->hasFile('photo')) {
+                $file = $request->file('photo');
+                $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('profile', $filename, 'public');
+                $validated['photo'] = $path;
+            } else {
+                $validated['photo'] = null;
+            }
 
             Employee::create($validated);
             DB::commit();
@@ -244,46 +230,7 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
-            if (
-                $request->photo_ai &&
-                Storage::disk('public')->exists($request->photo_ai)
-            ) {
-                Storage::disk('public')->delete($request->photo_ai);
-            }
             return back()->withInput()->with('error', 'Tambah pegawai gagal: ' . $e->getMessage());
         }
-    }
-
-    public function generateAI(Request $request)
-    {
-        $request->validate([
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
-
-
-        $file = $request->file('photo');
-
-        $tempName  = time() . '_temp.' . $file->extension();
-        $finalName = time() . '_ai.jpg';
-
-        $tempPath  = storage_path('app/public/temp/' . $tempName);
-        $finalPath = storage_path('app/public/profile/' . $finalName);
-
-        // simpan file upload sementara
-        $file->move(dirname($tempPath), basename($tempPath));
-
-        // path python
-        $size = $request->size ?? '3x4';
-
-        $python = env('PYTHON_PATH');
-        $script = base_path('scripts/process_photo.py');
-
-        exec("\"$python\" \"$script\" \"$tempPath\" \"$finalPath\" \"$size\"");
-
-        return response()->json([
-            'success' => true,
-            'url' => asset('storage/profile/' . $finalName),
-            'path' => 'profile/' . $finalName
-        ]);
     }
 }

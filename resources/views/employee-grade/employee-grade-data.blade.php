@@ -28,9 +28,7 @@
                                 'department' => $employee->department->name ?? '-',
                                 'status' => $employee->status,
                                 'tenure' => \Carbon\Carbon::parse($employee->join_date)->diff(now())->y . ' Tahun ' . \Carbon\Carbon::parse($employee->join_date)->diff(now())->m . ' Bulan',
-                                'photo' => $employee->photo
-                                    ? asset('storage/' . $employee->photo)
-                                    : asset('assets/images/default-user.png'),
+                                'photo' => $employee->photo_url,
                                 'join_date' => \Carbon\Carbon::parse($employee->join_date)->diffForHumans(),
                             ];
                         })
