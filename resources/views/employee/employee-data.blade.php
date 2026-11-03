@@ -137,8 +137,8 @@
                     </div>
                 </div>
                 <div class="text-sm text-slate-500">
-                    Menampilkan <span class="font-bold text-slate-900">5</span> dari <span
-                        class="font-bold text-slate-900">124</span> Pegawai
+                    Menampilkan <span class="font-bold text-slate-900">{{ $employees->count() }}</span> dari <span
+                        class="font-bold text-slate-900">{{ $employees->total() }}</span> Pegawai
                 </div>
             </div>
             <!-- Modern Table -->
@@ -160,7 +160,7 @@
                         @forelse ($employees as $employee)
                             <tr class="hover:bg-slate-50/50 transition-colors group">
                                 <td class="px-6 py-4 font-data-tabular">
-                                    {{ $loop->iteration }}
+                                    {{ $employees->firstItem() + $loop->index }}
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($employee->photo)
@@ -202,7 +202,7 @@
                                     {{ $employee->department->name ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <div class="flex justify-end space-x-2">
+                                    <div class="flex justify-end items-center space-x-2">
                                          <button type="button" 
                                             @click="showDetail({
                                                 name: '{{ addslashes($employee->name) }}',
@@ -237,12 +237,19 @@
                                                 edit
                                             </span>
                                         </a>
-                                        <button class="p-2 text-slate-400 hover:text-error transition-colors"
-                                            title="Delete">
-                                            <span class="material-symbols-outlined text-sm">
-                                                delete
-                                            </span>
-                                        </button>
+                                        <form action="{{ route('employee.employee-delete', $employee->id) }}"
+                                            method="POST"
+                                            class="inline-flex items-center"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pegawai {{ addslashes($employee->name) }}?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-2 text-slate-400 hover:text-error transition-colors"
+                                                title="Hapus Pegawai">
+                                                <span class="material-symbols-outlined text-sm">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </form>
                                         @endcan
                                     </div>
                                 </td>

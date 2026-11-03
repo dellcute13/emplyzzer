@@ -42,6 +42,16 @@ class Employee extends Model
         return $this->hasMany(Ranking::class);
     }
 
+    public function rankings()
+    {
+        return $this->hasMany(Ranking::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
     public function getPhotoUrlAttribute()
     {
         if (!$this->photo) {

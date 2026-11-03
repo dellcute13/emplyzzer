@@ -233,4 +233,35 @@ class EmployeeController extends Controller
             return back()->withInput()->with('error', 'Tambah pegawai gagal: ' . $e->getMessage());
         }
     }
+
+    public function employeeDelete($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $employee = Employee::findOrFail($id);
+
+            // Hapus file foto dari storage jika ada
+            if ($employee->photo && !str_starts_with($employee->photo, 'assets/') && !str_starts_with($employee->photo, 'http') && Storage::disk('public')->exists($employee->photo)) {
+                Storage::disk('public')->delete($employee->photo);
+            }
+
+            // Hapus data relasi terkait
+            $employee->evaluations()->delete();
+            $employee->rankings()->delete();
+            $employee->reports()->delete();
+
+            $employee->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('employee.employee-data')
+                ->with('success', 'Data pegawai berhasil dihapus');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()->with('error', 'Hapus pegawai gagal: ' . $e->getMessage());
+        }
+    }
 }
